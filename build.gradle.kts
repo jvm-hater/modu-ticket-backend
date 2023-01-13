@@ -1,35 +1,30 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    /* Spring plugins */
-    id("org.springframework.boot") version "3.0.1" apply false
+    id("org.springframework.boot") version "3.0.1"
     id("io.spring.dependency-management") version "1.1.0"
-
-    /* Kotlin plugins */
+    id("com.diffplug.spotless") version "6.12.1"
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.spring") version "1.7.22"
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_17
+// java.sourceCompatibility = JavaVersion.VERSION_17
 
 /* 프로젝트 + 서브 모듈 build.gradle 제어 */
 allprojects {
     group = "com.jvmhater"
     version = "0.0.1-SNAPSHOT"
 
-    repositories {
-        mavenCentral()
-    }
-}
+    repositories { mavenCentral() }
 
-/* 서브 모듈 build.gradle 제어 */
-subprojects {
-    apply(plugin = "kotlin")
-    apply(plugin = "kotlin-spring")
-    apply(plugin = "io.spring.dependency-management")
+    apply {
+        plugin("kotlin")
+        plugin("kotlin-spring")
+        plugin("io.spring.dependency-management")
+        plugin("com.diffplug.spotless")
+    }
+
+    kotlin { jvmToolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
 
     dependencies {
-        implementation("org.springframework.boot:spring-boot-starter-webflux")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
@@ -46,14 +41,34 @@ subprojects {
         }
     }
 
-    tasks.withType<KotlinCompile> {
+    spotless {
+        kotlin { ktfmt("0.42").kotlinlangStyle() }
+        kotlinGradle {
+            target("*.gradle.kts")
+            ktfmt("0.42").kotlinlangStyle()
+        }
+    }
+}
+
+/* 서브 모듈 build.gradle 제어 */
+subprojects {}
+
+/* build tasks */
+tasks {
+    bootJar { enabled = false }
+    jar { enabled = true }
+
+    compileKotlin {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
             jvmTarget = "17"
         }
     }
 
-    tasks.withType<Test> {
-        useJUnitPlatform()
+    assemble {
+        dependsOn(spotlessApply)
+        shouldRunAfter(spotlessApply)
     }
+
+    test { useJUnitPlatform() }
 }
