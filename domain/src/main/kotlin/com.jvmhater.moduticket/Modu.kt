@@ -1,4 +1,3 @@
 package com.jvmhater.moduticket
 
-class Modu {
-}
+class Modu {}
