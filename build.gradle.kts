@@ -6,8 +6,6 @@ plugins {
     kotlin("plugin.spring") version "1.7.22"
 }
 
-// java.sourceCompatibility = JavaVersion.VERSION_17
-
 /* 프로젝트 + 서브 모듈 build.gradle 제어 */
 allprojects {
     group = "com.jvmhater"
