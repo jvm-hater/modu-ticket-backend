@@ -1,3 +1,10 @@
 package com.jvmhater.moduticket
 
-class ModuServiceTest {}
+import org.junit.jupiter.api.Test
+
+class ModuServiceTest {
+    @Test
+    fun sum(){
+        assert(true)
+    }
+}
