@@ -1,9 +1,13 @@
-name: CI
+name: Presentation CI
 
 on:
   pull_request:
     branches: 
     - '**'
+    paths:
+      - 'presentation/**'
+      - 'domain/**'
+      - 'build.gradle.kts'
 
 jobs:
   build:
