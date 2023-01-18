@@ -1,6 +1,5 @@
 package com.jvmhater.moduticket.repository
 
-import com.jvmhater.moduticket.TestR2bcConfiguration
 import com.jvmhater.moduticket.model.Modu
 import com.jvmhater.moduticket.readResourceFile
 import com.jvmhater.moduticket.testcontainers.TestMySQLContainer

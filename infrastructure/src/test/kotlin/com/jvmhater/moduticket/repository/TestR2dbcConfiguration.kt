@@ -1,4 +1,4 @@
-package com.jvmhater.moduticket
+package com.jvmhater.moduticket.repository
 
 import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
 import io.r2dbc.spi.ConnectionFactory
