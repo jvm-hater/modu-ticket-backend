@@ -37,7 +37,6 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
         }
 
         fun start(): ConnectionFactory {
-            println("====Jayon-Test====")
             if (!Companion::instance.isInitialized) {
                 instance =
                     TestMySQLContainer()
