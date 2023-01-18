@@ -1,2 +1,12 @@
-server:
-  port: 8080
+spring:
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/modu_ticket
+    username: local
+    password: local
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1
+    url: jdbc:mysql://localhost:3306/modu_ticket
+    user: local
+    password: local
