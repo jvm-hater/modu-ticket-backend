@@ -25,5 +25,4 @@ class ModuRepositoryImpl(
     }
 }
 
-@Repository
-interface ModuR2dbcRepository : CoroutineCrudRepository<ModuEntity, String> {}
+@Repository interface ModuR2dbcRepository : CoroutineCrudRepository<ModuEntity, String> {}

@@ -17,8 +17,7 @@ import org.springframework.transaction.ReactiveTransactionManager
 @EnableR2dbcRepositories
 class MySQLConfiguration : AbstractR2dbcConfiguration() {
 
-    @Autowired
-    private lateinit var env: Environment
+    @Autowired private lateinit var env: Environment
 
     @Bean
     @Qualifier("mySQLConnectionFactory")
@@ -26,11 +25,26 @@ class MySQLConfiguration : AbstractR2dbcConfiguration() {
         return ConnectionFactories.get(
             ConnectionFactoryOptions.builder()
                 .option(ConnectionFactoryOptions.DRIVER, "mysql")
-                .option(ConnectionFactoryOptions.HOST, env.getProperty("CONF_MODU_TICKET_DB_HOST", "localhost"))
-                .option(ConnectionFactoryOptions.PORT, env.getProperty("CONF_MODU_TICKET_DB_PORT", "3306").toInt())
-                .option(ConnectionFactoryOptions.DATABASE, env.getProperty("CONF_MODU_TICKET_DB_DATABASE", "modu_ticket"))
-                .option(ConnectionFactoryOptions.USER, env.getProperty("CONF_MODU_TICKET_DB_USERNAME", "local"))
-                .option(ConnectionFactoryOptions.PASSWORD, env.getProperty("CONF_MODU_TICKET_DB_PASSWORD", "local"))
+                .option(
+                    ConnectionFactoryOptions.HOST,
+                    env.getProperty("CONF_MODU_TICKET_DB_HOST", "localhost")
+                )
+                .option(
+                    ConnectionFactoryOptions.PORT,
+                    env.getProperty("CONF_MODU_TICKET_DB_PORT", "3306").toInt()
+                )
+                .option(
+                    ConnectionFactoryOptions.DATABASE,
+                    env.getProperty("CONF_MODU_TICKET_DB_DATABASE", "modu_ticket")
+                )
+                .option(
+                    ConnectionFactoryOptions.USER,
+                    env.getProperty("CONF_MODU_TICKET_DB_USERNAME", "local")
+                )
+                .option(
+                    ConnectionFactoryOptions.PASSWORD,
+                    env.getProperty("CONF_MODU_TICKET_DB_PASSWORD", "local")
+                )
                 .build()
         )
     }
