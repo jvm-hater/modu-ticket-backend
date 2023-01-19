@@ -45,8 +45,7 @@ class MySQLConfiguration(private val env: Environment) : AbstractR2dbcConfigurat
     }
 
     @Bean
-    fun transactionManager(connectionFactory: ConnectionFactory
-    ): ReactiveTransactionManager {
+    fun transactionManager(connectionFactory: ConnectionFactory): ReactiveTransactionManager {
         return R2dbcTransactionManager(connectionFactory)
     }
 }
