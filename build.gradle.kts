@@ -25,14 +25,19 @@ allprojects {
     kotlin { jvmToolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
 
     dependencies {
-        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        /* kotlin */
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
         implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
-        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        /* testing */
+        testImplementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
         testImplementation("io.projectreactor:reactor-test")
+        testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
+        testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
     }
 
     dependencyManagement {

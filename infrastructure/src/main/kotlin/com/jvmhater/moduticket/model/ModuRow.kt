@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("modu")
-class ModuEntity(@Id @Column("id") val moduId: String, val name: String) : Persistable<String> {
+class ModuRow(@Id @Column("id") val moduId: String, val name: String) : Persistable<String> {
     @Transient private var newRow: Boolean = false
 
     fun toDomain(): Modu = Modu(id = moduId, name)
@@ -22,7 +22,7 @@ class ModuEntity(@Id @Column("id") val moduId: String, val name: String) : Persi
         /*
         Entity의 ID 값을 설정하여 넣어주어야 합니다.
          */
-        fun toInsert(modu: Modu): ModuEntity {
+        fun toInsert(modu: Modu): ModuRow {
             val moduEntity = modu.toRow()
             moduEntity.newRow = true
             return moduEntity
@@ -31,7 +31,7 @@ class ModuEntity(@Id @Column("id") val moduId: String, val name: String) : Persi
         /*
         기존 Entity의 ID가 변경되어 들어오면 예외가 발생합니다.
          */
-        fun toUpdate(modu: Modu): ModuEntity {
+        fun toUpdate(modu: Modu): ModuRow {
             val moduEntity = modu.toRow()
             moduEntity.newRow = false
             return moduEntity
@@ -39,4 +39,4 @@ class ModuEntity(@Id @Column("id") val moduId: String, val name: String) : Persi
     }
 }
 
-fun Modu.toRow(): ModuEntity = ModuEntity(moduId = id, name = name)
+fun Modu.toRow(): ModuRow = ModuRow(moduId = id, name = name)
