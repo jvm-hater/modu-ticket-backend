@@ -3,8 +3,6 @@ package com.jvmhater.moduticket.configuration
 import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryOptions
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
@@ -15,12 +13,9 @@ import org.springframework.transaction.ReactiveTransactionManager
 
 @Configuration
 @EnableR2dbcRepositories
-class MySQLConfiguration : AbstractR2dbcConfiguration() {
-
-    @Autowired private lateinit var env: Environment
+class MySQLConfiguration(private val env: Environment) : AbstractR2dbcConfiguration() {
 
     @Bean
-    @Qualifier("mySQLConnectionFactory")
     override fun connectionFactory(): ConnectionFactory {
         return ConnectionFactories.get(
             ConnectionFactoryOptions.builder()
@@ -50,8 +45,7 @@ class MySQLConfiguration : AbstractR2dbcConfiguration() {
     }
 
     @Bean
-    fun transactionManager(
-        @Qualifier("mySQLConnectionFactory") connectionFactory: ConnectionFactory
+    fun transactionManager(connectionFactory: ConnectionFactory
     ): ReactiveTransactionManager {
         return R2dbcTransactionManager(connectionFactory)
     }
