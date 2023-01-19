@@ -24,10 +24,6 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
         private lateinit var connectionFactory: ConnectionFactory
         private lateinit var flyway: Flyway
 
-        init {
-            start()
-        }
-
         private fun getConnectionFactoryOption(): ConnectionFactoryOptions {
             return MySQLR2DBCDatabaseContainer.getOptions(instance)
         }
