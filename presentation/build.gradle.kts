@@ -5,3 +5,6 @@ dependencies {
     /* spring */
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 }
+tasks.test {
+    useJUnitPlatform()
+}

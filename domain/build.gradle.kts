@@ -1,1 +1,4 @@
 dependencies {}
+tasks.test {
+    useJUnitPlatform()
+}
