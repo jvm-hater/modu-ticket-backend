@@ -1,4 +1,1 @@
 dependencies {}
-tasks.test {
-    useJUnitPlatform()
-}

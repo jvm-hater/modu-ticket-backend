@@ -54,7 +54,7 @@ allprojects {
 }
 
 /* 서브 모듈 build.gradle 제어 */
-subprojects {}
+subprojects { tasks { test { useJUnitPlatform() } } }
 
 /* build tasks */
 tasks {
