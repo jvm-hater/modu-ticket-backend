@@ -23,10 +23,6 @@ class ModuRepositoryImpl(
     override suspend fun update(modu: Modu): Modu {
         return moduR2dbcRepository.save(ModuRow.toUpdate(modu)).toDomain()
     }
-
-    override suspend fun buildTest(modu: Modu): Modu {
-        TODO("Not yet implemented")
-    }
 }
 
 @Repository interface ModuR2dbcRepository : CoroutineCrudRepository<ModuRow, String> {}

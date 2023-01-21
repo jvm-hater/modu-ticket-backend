@@ -6,5 +6,4 @@ interface ModuRepository {
     suspend fun save(modu: Modu): Modu
     suspend fun findById(id: String): Modu
     suspend fun update(modu: Modu): Modu
-    suspend fun buildTest(modu: Modu): Modu
 }
