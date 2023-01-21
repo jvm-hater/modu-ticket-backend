@@ -10,3 +10,8 @@ spring:
     url: jdbc:mysql://${CONF_MODU_TICKET_DB_HOST:localhost}:${CONF_MODU_TICKET_DB_PORT:3306}/${CONF_MODU_TICKET_DB_DATABASE:modu_ticket}
     user: ${CONF_MODU_TICKET_DB_USERNAME:local}
     password: ${CONF_MODU_TICKET_DB_PASSWORD:local}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  paths-to-match: /api/**
