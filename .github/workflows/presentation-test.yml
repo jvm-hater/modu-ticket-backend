@@ -25,6 +25,14 @@ jobs:
 
     - name: Test with Gradle 
       run: ./gradlew :presentation:test --stacktrace
+    - uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
       
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
