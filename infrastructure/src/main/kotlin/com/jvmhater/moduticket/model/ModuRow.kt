@@ -2,21 +2,15 @@ package com.jvmhater.moduticket.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Transient
-import org.springframework.data.domain.Persistable
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("modu")
-class ModuRow(@Id @Column("id") val moduId: String, val name: String) : Persistable<String> {
-    @Transient private var newRow: Boolean = false
+class ModuRow(@Id @Column("id") override val rowId: String, val name: String) : Row<String> {
 
-    fun toDomain(): Modu = Modu(id = moduId, name)
+    @Transient override var isNewRow: Boolean = false
 
-    override fun getId(): String = moduId
-
-    override fun isNew(): Boolean {
-        return this.newRow || this.moduId.isEmpty()
-    }
+    fun toDomain(): Modu = Modu(id = id, name = name)
 
     companion object {
         /*
@@ -24,7 +18,7 @@ class ModuRow(@Id @Column("id") val moduId: String, val name: String) : Persista
          */
         fun toInsert(modu: Modu): ModuRow {
             val moduEntity = modu.toRow()
-            moduEntity.newRow = true
+            moduEntity.isNewRow = true
             return moduEntity
         }
 
@@ -33,10 +27,10 @@ class ModuRow(@Id @Column("id") val moduId: String, val name: String) : Persista
          */
         fun toUpdate(modu: Modu): ModuRow {
             val moduEntity = modu.toRow()
-            moduEntity.newRow = false
+            moduEntity.isNewRow = false
             return moduEntity
         }
     }
 }
 
-fun Modu.toRow(): ModuRow = ModuRow(moduId = id, name = name)
+fun Modu.toRow(): ModuRow = ModuRow(rowId = id, name = name)
