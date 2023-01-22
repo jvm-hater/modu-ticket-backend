@@ -2,6 +2,7 @@ package com.jvmhater.moduticket.repository
 
 import com.jvmhater.moduticket.model.Modu
 import com.jvmhater.moduticket.model.ModuRow
+import com.jvmhater.moduticket.model.toRow
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
@@ -13,7 +14,7 @@ class ModuRepositoryImpl(
 ) : ModuRepository {
 
     override suspend fun save(modu: Modu): Modu {
-        return moduR2dbcRepository.save(ModuRow.toInsert(modu)).toDomain()
+        return moduR2dbcRepository.save(modu.toRow(isNewRow = true)).toDomain()
     }
 
     override suspend fun findById(id: String): Modu {
@@ -21,7 +22,7 @@ class ModuRepositoryImpl(
     }
 
     override suspend fun update(modu: Modu): Modu {
-        return moduR2dbcRepository.save(ModuRow.toUpdate(modu)).toDomain()
+        return moduR2dbcRepository.save(modu.toRow()).toDomain()
     }
 }
 
