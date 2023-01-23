@@ -1,4 +1,4 @@
-name: SpotlessLint
+name: SonarCloud
 
 on:
   pull_request:
