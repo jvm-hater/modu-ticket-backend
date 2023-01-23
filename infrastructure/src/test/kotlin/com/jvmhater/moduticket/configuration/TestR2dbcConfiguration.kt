@@ -1,4 +1,4 @@
-package com.jvmhater.moduticket.repository
+package com.jvmhater.moduticket.configuration
 
 import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
 import io.r2dbc.spi.ConnectionFactory
@@ -8,8 +8,8 @@ import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories
 
 @Configuration
-@EnableR2dbcRepositories
-class TestR2bcConfiguration : AbstractR2dbcConfiguration() {
+@EnableR2dbcRepositories("com.jvmhater.moduticket")
+class TestR2dbcConfiguration : AbstractR2dbcConfiguration() {
 
     @Bean
     override fun connectionFactory(): ConnectionFactory {
