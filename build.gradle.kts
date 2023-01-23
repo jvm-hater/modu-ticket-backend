@@ -2,6 +2,8 @@ plugins {
     id("org.springframework.boot") version "3.0.1"
     id("io.spring.dependency-management") version "1.1.0"
     id("com.diffplug.spotless") version "6.12.1"
+    jacoco
+    id("org.sonarqube") version "3.5.0.2730"
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.spring") version "1.7.22"
 }
@@ -73,5 +75,25 @@ tasks {
         shouldRunAfter(spotlessApply)
     }
 
-    test { useJUnitPlatform() }
+    test {
+        useJUnitPlatform()
+        finalizedBy(jacocoTestReport)
+    }
+    jacocoTestReport {
+        reports {
+            dependsOn(test)
+            xml.required.set(false)
+            csv.required.set(false)
+            html.required.set(true)
+            html.outputLocation.set(file("$buildDir/reports/coverage"))
+        }
+    }
+}
+
+sonarqube {
+    properties {
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.organization", "jvm-hater")
+        property("sonar.projectKey", "jvm-hater_modu-ticket-backend")
+    }
 }
