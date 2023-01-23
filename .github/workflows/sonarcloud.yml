@@ -24,6 +24,8 @@ jobs:
         restore-keys: ${{ runner.os }}-sonar
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - name: Spotless Apply
+      run: ./gradlew spotlessApply
     - name: SonarCloud Analyze
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
