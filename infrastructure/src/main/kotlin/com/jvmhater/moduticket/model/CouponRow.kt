@@ -1,35 +1,36 @@
 package com.jvmhater.moduticket.model
 
+import java.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Transient
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
-import java.time.LocalDateTime
 
 @Table("coupon")
 class CouponRow(
     @Id @Column("id") override val rowId: String,
     @Transient @Value("null") override val isNewRow: Boolean = false,
     val name: String,
-    val discountRate: Double,
-    val concertCategories: List<ConcertCategory>,
+    val discountRate: Int,
+    val concertCategory: ConcertCategory,
     val maxDiscountAmount: Int,
     val useStartDate: LocalDateTime,
-    val usedEndDate: LocalDateTime,
+    val useEndDate: LocalDateTime,
     val issuableQuantity: Int,
 ) : Row<String> {
 
-    fun toDomain(): Coupon = Coupon(
-        id = id,
-        name = name,
-        discountRate = discountRate,
-        concertCategories = concertCategories,
-        maxDiscountAmount = maxDiscountAmount,
-        useStartDate = useStartDate,
-        usedEndDate = usedEndDate,
-        issuableQuantity = issuableQuantity
-    )
+    fun toDomain(): Coupon =
+        Coupon(
+            id = id,
+            name = name,
+            discountRate = discountRate,
+            concertCategory = concertCategory,
+            maxDiscountAmount = maxDiscountAmount,
+            useStartDate = useStartDate,
+            useEndDate = useEndDate,
+            issuableQuantity = issuableQuantity
+        )
 }
 
 fun Coupon.toRow(isNewRow: Boolean = false): CouponRow {
@@ -38,10 +39,10 @@ fun Coupon.toRow(isNewRow: Boolean = false): CouponRow {
         name = name,
         isNewRow = isNewRow,
         discountRate = discountRate,
-        concertCategories = concertCategories,
+        concertCategory = concertCategory,
         maxDiscountAmount = maxDiscountAmount,
         useStartDate = useStartDate,
-        usedEndDate = usedEndDate,
+        useEndDate = useEndDate,
         issuableQuantity = issuableQuantity
     )
 }

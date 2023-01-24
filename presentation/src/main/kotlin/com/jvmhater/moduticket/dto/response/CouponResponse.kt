@@ -7,11 +7,11 @@ import java.time.LocalDateTime
 class CouponResponse(
     val id: String,
     val name: String,
-    val discountRate: Double,
-    val concertCategories: List<ConcertCategory>,
+    val discountRate: Int,
+    val concertCategory: ConcertCategory,
     val maxDiscountAmount: Int,
     val useStartDate: LocalDateTime,
-    val usedEndDate: LocalDateTime,
+    val useEndDate: LocalDateTime,
     val issuableQuantity: Int,
 ) {
 
@@ -22,10 +22,10 @@ class CouponResponse(
                     id = id,
                     name = name,
                     discountRate = discountRate,
-                    concertCategories = concertCategories,
+                    concertCategory = concertCategory,
                     maxDiscountAmount = maxDiscountAmount,
                     useStartDate = useStartDate,
-                    usedEndDate = usedEndDate,
+                    useEndDate = useEndDate,
                     issuableQuantity = issuableQuantity
                 )
             }

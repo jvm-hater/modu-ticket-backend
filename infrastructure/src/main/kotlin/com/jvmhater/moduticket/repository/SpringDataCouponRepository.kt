@@ -1,29 +1,50 @@
 package com.jvmhater.moduticket.repository
 
+import com.jvmhater.moduticket.exception.RecordAlreadyExisted
+import com.jvmhater.moduticket.exception.RecordNotFound
+import com.jvmhater.moduticket.exception.UnknownAccessFailure
 import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.model.CouponRow
 import com.jvmhater.moduticket.model.toRow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import org.springframework.dao.DataAccessException
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-class SpringDataCouponRepository(
-    private val r2dbcCouponRepository: R2dbcCouponRepository
-) : CouponRepository {
+class SpringDataCouponRepository(private val r2dbcCouponRepository: R2dbcCouponRepository) :
+    CouponRepository {
 
     override suspend fun findCoupons(name: String): List<Coupon> {
-        return r2dbcCouponRepository.findByName(name).map { it.toDomain() }.toList()
+        try {
+            return r2dbcCouponRepository.findByName(name).map { it.toDomain() }.toList()
+        } catch (e: DataAccessException) {
+            throw UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
+        }
     }
 
     override suspend fun find(id: String): Coupon {
-        return r2dbcCouponRepository.findById(id)?.toDomain() ?: throw RuntimeException()
+        try {
+            val record =
+                r2dbcCouponRepository.findById(id)
+                    ?: throw RecordNotFound(message = "존재하지 않은 쿠폰 id입니다.")
+            return record.toDomain()
+        } catch (e: DataAccessException) {
+            throw UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
+        }
     }
 
     override suspend fun create(coupon: Coupon): Coupon {
-        return r2dbcCouponRepository.save(coupon.toRow(isNewRow = true)).toDomain()
+        try {
+            return r2dbcCouponRepository.save(coupon.toRow(isNewRow = true)).toDomain()
+        } catch (e: DataIntegrityViolationException) {
+            throw RecordAlreadyExisted(e, "쿠폰 레코드가 이미 존재합니다.")
+        } catch (e: DataAccessException) {
+            throw UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
+        }
     }
 
     override suspend fun update(coupon: Coupon): Coupon {

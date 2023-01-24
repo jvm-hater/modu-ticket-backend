@@ -6,11 +6,11 @@ import java.time.LocalDateTime
 
 class UpdateCouponRequest(
     val name: String,
-    val discountRate: Double,
+    val discountRate: Int,
     val concertCategories: List<ConcertCategory>,
     val maxDiscountAmount: Int,
     val useStartDate: LocalDateTime,
-    val usedEndDate: LocalDateTime,
+    val useEndDate: LocalDateTime,
     val issuableQuantity: Int
 ) {
 
@@ -19,10 +19,10 @@ class UpdateCouponRequest(
             id = id,
             name = name,
             discountRate = discountRate,
-            concertCategories = concertCategories,
+            concertCategory = concertCategories,
             maxDiscountAmount = maxDiscountAmount,
             useStartDate = useStartDate,
-            usedEndDate = usedEndDate,
+            useEndDate = useEndDate,
             issuableQuantity = issuableQuantity
         )
     }

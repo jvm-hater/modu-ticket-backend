@@ -4,7 +4,5 @@ import io.kotest.core.spec.style.DescribeSpec
 
 class CouponTest : DescribeSpec() {
 
-    init {
-
-    }
+    init {}
 }

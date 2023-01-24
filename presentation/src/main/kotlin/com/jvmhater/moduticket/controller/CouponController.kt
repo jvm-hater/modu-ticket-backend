@@ -37,7 +37,9 @@ class CouponController(val couponService: CouponService) {
     @Operation(description = "특정 할인 쿠폰을 생성한다.")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    suspend fun createCoupon(@RequestBody createCouponRequest: CreateCouponRequest): CouponResponse {
+    suspend fun createCoupon(
+        @RequestBody createCouponRequest: CreateCouponRequest
+    ): CouponResponse {
         return CouponResponse.from(couponService.create(createCouponRequest.toDomain()))
     }
 

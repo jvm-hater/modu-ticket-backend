@@ -6,11 +6,11 @@ import java.util.UUID
 data class Coupon(
     val id: String = generateId(),
     val name: String,
-    val discountRate: Double,
-    val concertCategories: List<ConcertCategory>,
+    val discountRate: Int,
+    val concertCategory: ConcertCategory,
     val maxDiscountAmount: Int,
     val useStartDate: LocalDateTime,
-    val usedEndDate: LocalDateTime,
+    val useEndDate: LocalDateTime,
     val issuableQuantity: Int,
 ) {
     companion object {
