@@ -1,6 +1,6 @@
 package com.jvmhater.moduticket.repository
 
-import com.jvmhater.moduticket.genModu
+import com.jvmhater.moduticket.ModuFixture
 import com.jvmhater.moduticket.readResourceFile
 import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
 import io.kotest.core.spec.style.DescribeSpec
@@ -19,14 +19,14 @@ class SpringDataModuRepositoryTest(
     init {
         describe("#save") {
             it("success") {
-                val savedModu = moduRepositoryImpl.save(genModu())
+                val savedModu = moduRepositoryImpl.save(ModuFixture.generate())
                 moduRepositoryImpl.findById(savedModu.id) shouldBe savedModu
             }
         }
 
         describe("#update") {
             it("success") {
-                val savedModu = moduRepositoryImpl.save(genModu())
+                val savedModu = moduRepositoryImpl.save(ModuFixture.generate())
                 moduRepositoryImpl.update(savedModu.copy(name = "update-name")) shouldBe
                     savedModu.copy(name = "update-name")
             }
