@@ -1,7 +1,6 @@
 package com.jvmhater.moduticket.model
 
 import java.time.LocalDateTime
-import now
 
 object CouponFixture {
     fun generate(
@@ -10,7 +9,7 @@ object CouponFixture {
         discountRate: Int = 10,
         concertCategory: ConcertCategory = ConcertCategory.BALLAD,
         maxDiscountAmount: Int = 10000,
-        useStartDate: LocalDateTime = now(),
+        useStartDate: LocalDateTime = LocalDateTime.now(),
         useEndDate: LocalDateTime = useStartDate.plusDays(1L),
         issuableQuantity: Int = 100
     ): Coupon {

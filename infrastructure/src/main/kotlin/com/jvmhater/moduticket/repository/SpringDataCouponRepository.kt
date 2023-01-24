@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.dao.TransientDataAccessResourceException
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 
@@ -30,7 +31,7 @@ class SpringDataCouponRepository(private val r2dbcCouponRepository: R2dbcCouponR
         try {
             val record =
                 r2dbcCouponRepository.findById(id)
-                    ?: throw RecordNotFound(message = "존재하지 않은 쿠폰 id입니다.")
+                    ?: throw RecordNotFound(message = "존재하지 않은 쿠폰 ID 입니다.")
             return record.toDomain()
         } catch (e: DataAccessException) {
             throw UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
@@ -48,10 +49,19 @@ class SpringDataCouponRepository(private val r2dbcCouponRepository: R2dbcCouponR
     }
 
     override suspend fun update(coupon: Coupon): Coupon {
-        return r2dbcCouponRepository.save(coupon.toRow()).toDomain()
+        try {
+            return r2dbcCouponRepository.save(coupon.toRow()).toDomain()
+        } catch (e: TransientDataAccessResourceException) {
+            throw RecordNotFound(e, "존재하지 않는 쿠폰 ID 입니다.")
+        } catch (e: DataAccessException) {
+            throw UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
+        }
     }
 
     override suspend fun delete(id: String) {
+        if (!r2dbcCouponRepository.existsById(id)) {
+            throw RecordNotFound(message = "존재하지 않는 쿠폰 ID 입니다.")
+        }
         r2dbcCouponRepository.deleteById(id)
     }
 }

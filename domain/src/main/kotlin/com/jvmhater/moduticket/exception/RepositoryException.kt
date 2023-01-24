@@ -5,7 +5,7 @@ sealed class RepositoryError(override val message: String, override val cause: T
     val name: String = this.javaClass.simpleName ?: "UnknownException"
 }
 
-data class RecordNotFound(override val message: String, override val cause: Throwable? = null) :
+data class RecordNotFound(override val cause: Throwable? = null, override val message: String) :
     RepositoryError(message, cause)
 
 data class RecordAlreadyExisted(
