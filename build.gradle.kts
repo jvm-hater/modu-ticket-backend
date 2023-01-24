@@ -2,6 +2,7 @@ plugins {
     id("org.springframework.boot") version "3.0.1"
     id("io.spring.dependency-management") version "1.1.0"
     id("com.diffplug.spotless") version "6.12.1"
+    id("java-test-fixtures")
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.spring") version "1.7.22"
 }
@@ -18,6 +19,7 @@ allprojects {
         plugin("kotlin-spring")
         plugin("io.spring.dependency-management")
         plugin("com.diffplug.spotless")
+        plugin("java-test-fixtures")
     }
 
     kotlin { jvmToolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
