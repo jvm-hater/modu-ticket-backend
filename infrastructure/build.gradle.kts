@@ -1,6 +1,6 @@
 dependencies {
     implementation(project(":domain"))
-    testImplementation(project(":domain"))
+    testImplementation(testFixtures(project(":domain")))
 
     /* database */
     implementation("mysql:mysql-connector-java")
