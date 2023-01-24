@@ -1,0 +1,12 @@
+spring:
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/modu_ticket
+    username: test
+    password: test
+#  flyway:
+#    enabled: true
+#    baseline-on-migrate: true
+#    baseline-version: 1
+#    url: jdbc:mysql://localhost:3306/modu_ticket
+#    user: test
+#    password: test
