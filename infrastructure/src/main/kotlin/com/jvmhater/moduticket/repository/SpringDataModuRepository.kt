@@ -3,6 +3,7 @@ package com.jvmhater.moduticket.repository
 import com.jvmhater.moduticket.model.Modu
 import com.jvmhater.moduticket.model.ModuRow
 import com.jvmhater.moduticket.model.toRow
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class ModuRepositoryImpl(
     private val databaseClient: DatabaseClient,
+    private val r2dbcEntityTemplate: R2dbcEntityTemplate,
     private val moduR2dbcRepository: ModuR2dbcRepository,
 ) : ModuRepository {
 
