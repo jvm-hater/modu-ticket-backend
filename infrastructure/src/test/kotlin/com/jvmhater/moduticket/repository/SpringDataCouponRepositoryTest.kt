@@ -1,7 +1,6 @@
 package com.jvmhater.moduticket.repository
 
-import com.jvmhater.moduticket.exception.RecordAlreadyExisted
-import com.jvmhater.moduticket.exception.RecordNotFound
+import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.model.CouponFixture
 import com.jvmhater.moduticket.readResourceFile
 import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
@@ -56,7 +55,9 @@ class SpringDataCouponRepositoryTest(
 
             context("특정 쿠폰 ID를 가진 Coupon Row가 없다면") {
                 it("쿠폰 조회에 실패한다.") {
-                    shouldThrow<RecordNotFound> { couponRepository.find("not-found-id") }
+                    shouldThrow<RepositoryException.RecordNotFound> {
+                        couponRepository.find("not-found-id")
+                    }
                 }
             }
         }
@@ -73,7 +74,9 @@ class SpringDataCouponRepositoryTest(
             context("이미 존재하는 Coupon 객체가 주어지면") {
                 val coupon = couponRepository.create(CouponFixture.generate())
                 it("Coupon Row 삽입에 실패한다.") {
-                    shouldThrow<RecordAlreadyExisted> { couponRepository.create(coupon) }
+                    shouldThrow<RepositoryException.RecordAlreadyExisted> {
+                        couponRepository.create(coupon)
+                    }
                 }
             }
         }
@@ -87,7 +90,7 @@ class SpringDataCouponRepositoryTest(
                 }
 
                 it("해당 쿠폰 ID 값인 Coupon Row가 없다면 Coupon Row 업데이트에 실패한다.") {
-                    shouldThrow<RecordNotFound> {
+                    shouldThrow<RepositoryException.RecordNotFound> {
                         couponRepository.update(CouponFixture.generate())
                     }
                 }
@@ -100,13 +103,17 @@ class SpringDataCouponRepositoryTest(
                 it("해당 쿠폰 ID 값인 Coupon Row 삭제에 성공한다.") {
                     couponRepository.delete(coupon.id)
 
-                    shouldThrow<RecordNotFound> { couponRepository.find(coupon.id) }
+                    shouldThrow<RepositoryException.RecordNotFound> {
+                        couponRepository.find(coupon.id)
+                    }
                 }
             }
 
             context("존재하지 않는 쿠폰 ID가 주어지면") {
                 it("Coupon Row 삭제에 실패한다.") {
-                    shouldThrow<RecordNotFound> { couponRepository.delete("not-found-id") }
+                    shouldThrow<RepositoryException.RecordNotFound> {
+                        couponRepository.delete("not-found-id")
+                    }
                 }
             }
         }

@@ -1,8 +1,6 @@
 package com.jvmhater.moduticket.repository
 
-import com.jvmhater.moduticket.exception.RecordAlreadyExisted
-import com.jvmhater.moduticket.exception.RecordNotFound
-import com.jvmhater.moduticket.exception.UnknownAccessFailure
+import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.model.CouponRow
 import com.jvmhater.moduticket.model.toRow
@@ -23,7 +21,7 @@ class SpringDataCouponRepository(private val r2dbcCouponRepository: R2dbcCouponR
         try {
             return r2dbcCouponRepository.findByName(name).map { it.toDomain() }.toList()
         } catch (e: DataAccessException) {
-            throw UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
+            throw RepositoryException.UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
         }
     }
 
@@ -31,10 +29,10 @@ class SpringDataCouponRepository(private val r2dbcCouponRepository: R2dbcCouponR
         try {
             val record =
                 r2dbcCouponRepository.findById(id)
-                    ?: throw RecordNotFound(message = "존재하지 않은 쿠폰 ID 입니다.")
+                    ?: throw RepositoryException.RecordNotFound(message = "존재하지 않은 쿠폰 ID 입니다.")
             return record.toDomain()
         } catch (e: DataAccessException) {
-            throw UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
+            throw RepositoryException.UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
         }
     }
 
@@ -42,9 +40,9 @@ class SpringDataCouponRepository(private val r2dbcCouponRepository: R2dbcCouponR
         try {
             return r2dbcCouponRepository.save(coupon.toRow(isNewRow = true)).toDomain()
         } catch (e: DataIntegrityViolationException) {
-            throw RecordAlreadyExisted(e, "쿠폰 레코드가 이미 존재합니다.")
+            throw RepositoryException.RecordAlreadyExisted(e, "쿠폰 레코드가 이미 존재합니다.")
         } catch (e: DataAccessException) {
-            throw UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
+            throw RepositoryException.UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
         }
     }
 
@@ -52,15 +50,15 @@ class SpringDataCouponRepository(private val r2dbcCouponRepository: R2dbcCouponR
         try {
             return r2dbcCouponRepository.save(coupon.toRow()).toDomain()
         } catch (e: TransientDataAccessResourceException) {
-            throw RecordNotFound(e, "존재하지 않는 쿠폰 ID 입니다.")
+            throw RepositoryException.RecordNotFound(e, "존재하지 않는 쿠폰 ID 입니다.")
         } catch (e: DataAccessException) {
-            throw UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
+            throw RepositoryException.UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
         }
     }
 
     override suspend fun delete(id: String) {
         if (!r2dbcCouponRepository.existsById(id)) {
-            throw RecordNotFound(message = "존재하지 않는 쿠폰 ID 입니다.")
+            throw RepositoryException.RecordNotFound(message = "존재하지 않는 쿠폰 ID 입니다.")
         }
         r2dbcCouponRepository.deleteById(id)
     }

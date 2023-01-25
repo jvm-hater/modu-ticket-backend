@@ -1,10 +1,10 @@
 package com.jvmhater.moduticket.model
 
+import com.jvmhater.moduticket.util.generateId
 import java.time.LocalDateTime
-import java.util.UUID
 
 data class Coupon(
-    val id: String = generateId(),
+    val id: String = generateId(ID_PREFIX),
     val name: String,
     val discountRate: Int,
     val concertCategory: ConcertCategory,
@@ -14,8 +14,6 @@ data class Coupon(
     val issuableQuantity: Int,
 ) {
     companion object {
-        private const val ID_PREFIX = "coupon-id-"
-
-        fun generateId(): String = ID_PREFIX + UUID.randomUUID().toString()
+        const val ID_PREFIX = "coupon-id-"
     }
 }
