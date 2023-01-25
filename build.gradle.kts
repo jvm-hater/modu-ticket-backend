@@ -38,6 +38,9 @@ allprojects {
         testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
         testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+        /* test fixtures */
+        testFixturesImplementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
     }
 
     dependencyManagement {

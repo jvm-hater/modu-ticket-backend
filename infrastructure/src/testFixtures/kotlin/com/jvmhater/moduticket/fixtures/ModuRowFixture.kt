@@ -1,4 +1,4 @@
-package com.jvmhater.moduticket
+package com.jvmhater.moduticket.fixtures
 
 import com.jvmhater.moduticket.model.ModuRow
 

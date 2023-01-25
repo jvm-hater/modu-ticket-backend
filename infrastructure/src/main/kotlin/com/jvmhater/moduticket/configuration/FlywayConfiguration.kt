@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration
 
 // https://stackoverflow.com/a/61412233
 @Configuration
-class FlywayConfig {
+class FlywayConfiguration {
 
     @Bean
     fun flyway(flywayProperties: FlywayProperties): Flyway {
