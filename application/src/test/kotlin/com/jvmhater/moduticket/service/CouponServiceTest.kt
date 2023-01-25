@@ -65,9 +65,12 @@ class CouponServiceTest : DescribeSpec() {
                 val id = "not-found-id"
 
                 it("쿠폰 조회에 실패한다.") {
-                    coEvery { couponRepository.find(id) } throws RepositoryException.RecordNotFound(message = "")
+                    coEvery { couponRepository.find(id) } throws
+                        RepositoryException.RecordNotFound(message = "")
 
-                    shouldThrow<RepositoryException.RecordNotFound> { couponService.find("not-found-id") }
+                    shouldThrow<RepositoryException.RecordNotFound> {
+                        couponService.find("not-found-id")
+                    }
                 }
             }
         }
@@ -88,7 +91,9 @@ class CouponServiceTest : DescribeSpec() {
                     coEvery { couponRepository.create(any()) } throws
                         RepositoryException.RecordAlreadyExisted(message = "")
 
-                    shouldThrow<RepositoryException.RecordAlreadyExisted> { couponService.create(coupon) }
+                    shouldThrow<RepositoryException.RecordAlreadyExisted> {
+                        couponService.create(coupon)
+                    }
                 }
             }
         }
@@ -102,7 +107,8 @@ class CouponServiceTest : DescribeSpec() {
                 }
 
                 it("해당 쿠폰 ID 값인 Coupon Row가 없다면 Coupon Row 업데이트에 실패한다.") {
-                    coEvery { couponRepository.update(coupon) } throws RepositoryException.RecordNotFound(message = "")
+                    coEvery { couponRepository.update(coupon) } throws
+                        RepositoryException.RecordNotFound(message = "")
 
                     shouldThrow<RepositoryException.RecordNotFound> { couponService.update(coupon) }
                 }
@@ -116,7 +122,9 @@ class CouponServiceTest : DescribeSpec() {
                     coEvery { couponRepository.delete(coupon.id) } throws
                         RepositoryException.RecordNotFound(message = "")
 
-                    shouldThrow<RepositoryException.RecordNotFound> { couponService.delete(coupon.id) }
+                    shouldThrow<RepositoryException.RecordNotFound> {
+                        couponService.delete(coupon.id)
+                    }
                 }
             }
         }

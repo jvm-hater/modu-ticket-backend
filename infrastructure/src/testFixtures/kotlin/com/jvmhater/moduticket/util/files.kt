@@ -1,4 +1,4 @@
-package com.jvmhater.moduticket
+package com.jvmhater.moduticket.util
 
 import java.io.BufferedReader
 import java.io.InputStreamReader
