@@ -3,12 +3,12 @@ package com.jvmhater.moduticket.testcontainers
 import dev.miku.r2dbc.mysql.MySqlConnectionFactoryProvider
 import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryOptions
+import java.time.Duration
 import org.flywaydb.core.Flyway
 import org.springframework.r2dbc.core.DatabaseClient
 import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.containers.MySQLR2DBCDatabaseContainer
 import org.testcontainers.containers.output.Slf4jLogConsumer
-import java.time.Duration
 
 class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
 

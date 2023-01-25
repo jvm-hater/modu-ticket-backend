@@ -16,7 +16,8 @@ class SpringDataModuRepositoryTest(
     moduR2dbcRepository: ModuR2dbcRepository
 ) : DescribeSpec({ afterEach { TestMySQLContainer.sql(readResourceFile("ddl/truncate.sql")) } }) {
 
-    private val moduRepositoryImpl = ModuRepositoryImpl(databaseClient, r2dbcEntityTemplate, moduR2dbcRepository)
+    private val moduRepositoryImpl =
+        ModuRepositoryImpl(databaseClient, r2dbcEntityTemplate, moduR2dbcRepository)
 
     init {
         describe("#save") {

@@ -11,6 +11,12 @@ https://www.baeldung.com/spring-boot-testcontainers-integration-test
 class IntegrationTestContextInitializer :
     ApplicationContextInitializer<ConfigurableApplicationContext> {
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
-        TestMySQLContainer.start()
+        val databaseProperty = TestMySQLContainer.start()
+
+        System.setProperty("CONF_MODU_TICKET_DB_HOST", databaseProperty.host)
+        System.setProperty("CONF_MODU_TICKET_DB_PORT", databaseProperty.port.toString())
+        System.setProperty("CONF_MODU_TICKET_DB_DATABASE", databaseProperty.databaseName)
+        System.setProperty("CONF_MODU_TICKET_DB_USERNAME", databaseProperty.username)
+        System.setProperty("CONF_MODU_TICKET_DB_PASSWORD", databaseProperty.password)
     }
 }
