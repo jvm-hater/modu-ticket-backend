@@ -1,5 +1,6 @@
 package com.jvmhater.moduticket.repository
 
+import com.jvmhater.moduticket.TestContainerTest
 import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.model.CouponFixture
 import com.jvmhater.moduticket.readResourceFile
@@ -11,9 +12,8 @@ import io.kotest.core.test.TestResult
 import io.kotest.extensions.time.ConstantNowTestListener
 import io.kotest.matchers.shouldBe
 import java.time.LocalDateTime
-import org.springframework.test.context.ContextConfiguration
 
-@ContextConfiguration(classes = [TestR2bcConfiguration::class])
+@TestContainerTest
 class SpringDataCouponRepositoryTest(
     r2dbcCouponRepository: R2dbcCouponRepository,
 ) : DescribeSpec() {

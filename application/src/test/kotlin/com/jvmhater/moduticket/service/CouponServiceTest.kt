@@ -1,7 +1,6 @@
 package com.jvmhater.moduticket.service
 
-import com.jvmhater.moduticket.exception.RecordAlreadyExisted
-import com.jvmhater.moduticket.exception.RecordNotFound
+import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.model.CouponFixture
 import com.jvmhater.moduticket.repository.CouponRepository
 import io.kotest.assertions.throwables.shouldThrow
@@ -66,9 +65,9 @@ class CouponServiceTest : DescribeSpec() {
                 val id = "not-found-id"
 
                 it("쿠폰 조회에 실패한다.") {
-                    coEvery { couponRepository.find(id) } throws RecordNotFound(message = "")
+                    coEvery { couponRepository.find(id) } throws RepositoryException.RecordNotFound(message = "")
 
-                    shouldThrow<RecordNotFound> { couponService.find("not-found-id") }
+                    shouldThrow<RepositoryException.RecordNotFound> { couponService.find("not-found-id") }
                 }
             }
         }
@@ -87,9 +86,9 @@ class CouponServiceTest : DescribeSpec() {
             context("이미 존재하는 Coupon 객체가 주어지면") {
                 it("Coupon Row 삽입에 실패한다.") {
                     coEvery { couponRepository.create(any()) } throws
-                        RecordAlreadyExisted(message = "")
+                        RepositoryException.RecordAlreadyExisted(message = "")
 
-                    shouldThrow<RecordAlreadyExisted> { couponService.create(coupon) }
+                    shouldThrow<RepositoryException.RecordAlreadyExisted> { couponService.create(coupon) }
                 }
             }
         }
@@ -103,9 +102,9 @@ class CouponServiceTest : DescribeSpec() {
                 }
 
                 it("해당 쿠폰 ID 값인 Coupon Row가 없다면 Coupon Row 업데이트에 실패한다.") {
-                    coEvery { couponRepository.update(coupon) } throws RecordNotFound(message = "")
+                    coEvery { couponRepository.update(coupon) } throws RepositoryException.RecordNotFound(message = "")
 
-                    shouldThrow<RecordNotFound> { couponService.update(coupon) }
+                    shouldThrow<RepositoryException.RecordNotFound> { couponService.update(coupon) }
                 }
             }
         }
@@ -115,9 +114,9 @@ class CouponServiceTest : DescribeSpec() {
             context("존재하지 않는 쿠폰 ID가 주어지면") {
                 it("Coupon Row 삭제에 실패한다.") {
                     coEvery { couponRepository.delete(coupon.id) } throws
-                        RecordNotFound(message = "")
+                        RepositoryException.RecordNotFound(message = "")
 
-                    shouldThrow<RecordNotFound> { couponService.delete(coupon.id) }
+                    shouldThrow<RepositoryException.RecordNotFound> { couponService.delete(coupon.id) }
                 }
             }
         }
