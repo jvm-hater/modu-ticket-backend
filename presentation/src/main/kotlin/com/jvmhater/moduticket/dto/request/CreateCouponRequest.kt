@@ -11,7 +11,7 @@ class CreateCouponRequest(
     val maxDiscountAmount: Int,
     val useStartDate: LocalDateTime,
     val useEndDate: LocalDateTime,
-    val issuableQuantity: Int
+    val issuableQuantity: Int,
 ) {
 
     fun toDomain(): Coupon {
@@ -24,5 +24,21 @@ class CreateCouponRequest(
             useEndDate = useEndDate,
             issuableQuantity = issuableQuantity
         )
+    }
+
+    companion object {
+        fun from(coupon: Coupon): CreateCouponRequest {
+            return coupon.run {
+                CreateCouponRequest(
+                    name = name,
+                    discountRate = discountRate,
+                    concertCategory = concertCategory,
+                    maxDiscountAmount = maxDiscountAmount,
+                    useStartDate = useStartDate,
+                    useEndDate = useEndDate,
+                    issuableQuantity = issuableQuantity
+                )
+            }
+        }
     }
 }
