@@ -32,9 +32,9 @@ class AuthServiceTest : DescribeSpec() {
             }
             context("When the password is wrong") {
                 coEvery { authRepository.login("test", "password") } throws
-                    DomainException.InvalidRequestException(message = "비밀번호가 일치하지 않습니다.")
+                    DomainException.InvalidArgumentException(message = "비밀번호가 일치하지 않습니다.")
                 it("success") {
-                    shouldThrow<DomainException.InvalidRequestException> {
+                    shouldThrow<DomainException.InvalidArgumentException> {
                         authService.login("test", "password")
                     }
                 }
