@@ -9,11 +9,6 @@ object UserRowFixture {
         rank: String = "DIAMOND",
         point: Int = 1000
     ): UserRow {
-        return UserRow(
-            rowId = rowId,
-            password = password,
-            rank = rank,
-            point = point
-        )
+        return UserRow(rowId = rowId, password = password, rank = rank, point = point)
     }
 }

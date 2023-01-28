@@ -1,7 +1,6 @@
 package com.jvmhater.moduticket.model
 
 import com.jvmhater.moduticket.util.generateId
-import java.time.LocalDateTime
 
 object UserFixture {
     fun generate(
@@ -10,11 +9,6 @@ object UserFixture {
         rank: Rank = Rank.DIAMOND,
         point: Int = 1000
     ): User {
-        return User(
-            id = id,
-            coupons = coupons,
-            rank = rank,
-            point = point
-        )
+        return User(id = id, coupons = coupons, rank = rank, point = point)
     }
 }

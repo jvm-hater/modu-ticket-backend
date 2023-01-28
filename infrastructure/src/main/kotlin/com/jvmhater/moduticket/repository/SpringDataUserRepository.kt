@@ -2,12 +2,10 @@ package com.jvmhater.moduticket.repository
 
 import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.model.*
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.dao.TransientDataAccessResourceException
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 
@@ -15,16 +13,9 @@ import org.springframework.stereotype.Repository
 class SpringDataUserRepository(private val r2dbcUserRepository: R2dbcUserRepository) :
     UserRepository {
 
-
     override suspend fun create(id: String, password: String) {
         try {
-            r2dbcUserRepository.save(
-                UserRow(
-                    isNewRow = true,
-                    rowId = id,
-                    password = password
-                )
-            )
+            r2dbcUserRepository.save(UserRow(isNewRow = true, rowId = id, password = password))
         } catch (e: DataIntegrityViolationException) {
             throw RepositoryException.RecordAlreadyExisted(e, "이미 존재하는 유저입니다.")
         } catch (e: DataAccessException) {
@@ -42,11 +33,10 @@ class SpringDataUserRepository(private val r2dbcUserRepository: R2dbcUserReposit
     }
 
     override suspend fun delete(id: String) {
-        r2dbcUserRepository.findById(id) ?: throw RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
+        r2dbcUserRepository.findById(id)
+            ?: throw RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
         return r2dbcUserRepository.deleteById(id)
     }
 }
 
-
-@Repository
-interface R2dbcUserRepository : CoroutineCrudRepository<UserRow, String>
+@Repository interface R2dbcUserRepository : CoroutineCrudRepository<UserRow, String>

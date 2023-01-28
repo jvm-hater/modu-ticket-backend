@@ -1,11 +1,7 @@
 package com.jvmhater.moduticket.service
 
-import com.jvmhater.moduticket.exception.DomainException
 import com.jvmhater.moduticket.exception.RepositoryException
-import com.jvmhater.moduticket.model.Rank
-import com.jvmhater.moduticket.model.User
 import com.jvmhater.moduticket.model.UserFixture
-import com.jvmhater.moduticket.repository.AuthRepository
 import com.jvmhater.moduticket.repository.UserRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
@@ -27,9 +23,8 @@ class UserServiceTest : DescribeSpec() {
                 }
             }
             context("When the user already exists") {
-                coEvery { userRepository.create("test", "password") } throws RepositoryException.RecordAlreadyExisted(
-                    message = "이미 존재하는 유저입니다."
-                )
+                coEvery { userRepository.create("test", "password") } throws
+                    RepositoryException.RecordAlreadyExisted(message = "이미 존재하는 유저입니다.")
                 it("throw RecordAlreadyExisted") {
                     shouldThrow<RepositoryException.RecordAlreadyExisted> {
                         userService.signUp("test", "password")
@@ -47,11 +42,10 @@ class UserServiceTest : DescribeSpec() {
                 }
             }
             context("When the user not exists") {
-                coEvery { userRepository.find("test") } throws RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
+                coEvery { userRepository.find("test") } throws
+                    RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
                 it("throw RecordNotFound") {
-                    shouldThrow<RepositoryException.RecordNotFound> {
-                        userService.find("test")
-                    }
+                    shouldThrow<RepositoryException.RecordNotFound> { userService.find("test") }
                 }
             }
         }
@@ -64,11 +58,10 @@ class UserServiceTest : DescribeSpec() {
                 }
             }
             context("When the user not exists") {
-                coEvery { userRepository.delete("test") } throws RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
+                coEvery { userRepository.delete("test") } throws
+                    RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
                 it("throw RecordNotFound") {
-                    shouldThrow<RepositoryException.RecordNotFound> {
-                        userService.delete("test")
-                    }
+                    shouldThrow<RepositoryException.RecordNotFound> { userService.delete("test") }
                 }
             }
         }

@@ -9,6 +9,4 @@ class AuthService(private val authRepository: AuthRepository) {
     suspend fun login(id: String, password: String) {
         return authRepository.login(id, password)
     }
-
-
 }

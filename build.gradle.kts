@@ -34,8 +34,8 @@ allprojects {
         implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
         implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
-//        implementation("org.springframework.boot:spring-boot-starter-security")
-//        implementation("io.jsonwebtoken:jjwt:0.9.1")
+        //        implementation("org.springframework.boot:spring-boot-starter-security")
+        //        implementation("io.jsonwebtoken:jjwt:0.9.1")
 
         /* testing */
         testImplementation("io.github.microutils:kotlin-logging-jvm:3.0.4")

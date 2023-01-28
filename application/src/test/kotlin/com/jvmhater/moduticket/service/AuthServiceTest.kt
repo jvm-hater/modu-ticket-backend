@@ -16,22 +16,24 @@ class AuthServiceTest : DescribeSpec() {
         describe("#login") {
             context("When the request is valid") {
                 coEvery { authRepository.login("test", "password") } returns Unit
-                it("success"){
+                it("success") {
                     val result = authService.login("test", "password")
                     result shouldBe Unit
                 }
             }
             context("When the user not exists") {
-                coEvery { authRepository.login("test", "password") } throws RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
-                it("success"){
+                coEvery { authRepository.login("test", "password") } throws
+                    RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
+                it("success") {
                     shouldThrow<RepositoryException.RecordNotFound> {
                         authService.login("test", "password")
                     }
                 }
             }
             context("When the password is wrong") {
-                coEvery { authRepository.login("test", "password") } throws DomainException.InvalidRequestException(message = "비밀번호가 일치하지 않습니다.")
-                it("success"){
+                coEvery { authRepository.login("test", "password") } throws
+                    DomainException.InvalidRequestException(message = "비밀번호가 일치하지 않습니다.")
+                it("success") {
                     shouldThrow<DomainException.InvalidRequestException> {
                         authService.login("test", "password")
                     }
