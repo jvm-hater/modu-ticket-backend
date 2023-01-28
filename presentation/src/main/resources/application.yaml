@@ -15,3 +15,7 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
   paths-to-match: /api/**
+jwt:
+  header: Authorization
+  secret: bW9kdS10aWNrZXQ=
+  token-validity-in-seconds: 60

@@ -17,6 +17,13 @@ class GlobalExceptionHandler {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST)
             is RepositoryException.UnknownAccessFailure ->
                 ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            is RepositoryException.DataIntegrityException -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        }.body(ErrorResponse(e.message))
+    }
+    @ExceptionHandler(value = [DomainException::class])
+    fun handleDomainException(e: DomainException): ResponseEntity<ErrorResponse> {
+        return when (e) {
+            is DomainException.InvalidRequestException -> ResponseEntity.status(HttpStatus.BAD_REQUEST)
         }.body(ErrorResponse(e.message))
     }
 }

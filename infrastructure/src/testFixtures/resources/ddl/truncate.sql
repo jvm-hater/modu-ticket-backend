@@ -1,1 +1,2 @@
 TRUNCATE TABLE coupon;
+TRUNCATE TABLE users;
