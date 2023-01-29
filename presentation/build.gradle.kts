@@ -1,6 +1,8 @@
 dependencies {
     implementation(project(":application"))
     implementation(project(":domain"))
+    testImplementation(testFixtures(project(":domain")))
+    testImplementation(testFixtures(project(":infrastructure")))
 
     /* spring */
     implementation("org.springframework.boot:spring-boot-starter-webflux")
