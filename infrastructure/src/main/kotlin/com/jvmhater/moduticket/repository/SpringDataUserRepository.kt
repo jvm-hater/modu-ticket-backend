@@ -1,12 +1,11 @@
 package com.jvmhater.moduticket.repository
 
 import com.jvmhater.moduticket.exception.RepositoryException
-import com.jvmhater.moduticket.model.*
-import kotlinx.coroutines.flow.map
+import com.jvmhater.moduticket.model.User
+import com.jvmhater.moduticket.model.UserRow
 import kotlinx.coroutines.flow.toList
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -38,5 +37,3 @@ class SpringDataUserRepository(private val r2dbcUserRepository: R2dbcUserReposit
         return r2dbcUserRepository.deleteById(id)
     }
 }
-
-@Repository interface R2dbcUserRepository : CoroutineCrudRepository<UserRow, String>

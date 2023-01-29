@@ -2,7 +2,7 @@ package com.jvmhater.moduticket.controller
 
 import com.jvmhater.moduticket.IntegrationTest
 import com.jvmhater.moduticket.doPost
-import com.jvmhater.moduticket.dto.request.AuthRequest
+import com.jvmhater.moduticket.dto.request.LoginRequest
 import com.jvmhater.moduticket.repository.UserRepository
 import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
 import com.jvmhater.moduticket.util.readResourceFile
@@ -23,20 +23,20 @@ class AuthControllerTest(client: WebTestClient, val userRepository: UserReposito
 
     init {
         describe("#login") {
-            context("when the user exists") {
+            context("존재하는 유저의 정보가 입력되면") {
                 userRepository.create("testId", "testPassword")
 
-                it("success") {
+                it("로그인에 성공한다.") {
                     client
-                        .doPost(baseUrl, AuthRequest(id = "testId", password = "testPassword"))
+                        .doPost(baseUrl, LoginRequest(id = "testId", password = "testPassword"))
                         .expectStatus()
                         .isOk
                 }
             }
-            context("when the user not exists") {
-                it("return not found status") {
+            context("해당 유저가 존재하지 않는다면") {
+                it("로그인에 실패한다.") {
                     client
-                        .doPost(baseUrl, AuthRequest(id = "testId234", password = "testPassword"))
+                        .doPost(baseUrl, LoginRequest(id = "testId234", password = "testPassword"))
                         .expectStatus()
                         .isNotFound
                 }

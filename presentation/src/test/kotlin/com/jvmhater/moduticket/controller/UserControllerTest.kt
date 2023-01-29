@@ -4,7 +4,7 @@ import com.jvmhater.moduticket.IntegrationTest
 import com.jvmhater.moduticket.doDelete
 import com.jvmhater.moduticket.doGet
 import com.jvmhater.moduticket.doPost
-import com.jvmhater.moduticket.dto.request.AuthRequest
+import com.jvmhater.moduticket.dto.request.SignUpRequest
 import com.jvmhater.moduticket.dto.response.UserResponse
 import com.jvmhater.moduticket.model.Rank
 import com.jvmhater.moduticket.repository.UserRepository
@@ -33,7 +33,7 @@ class UserControllerTest(client: WebTestClient, val userRepository: UserReposito
                     client
                         .doPost(
                             "/api/signup",
-                            request = AuthRequest(id = "test", password = "password")
+                            request = SignUpRequest(id = "test", password = "password")
                         )
                         .expectStatus()
                         .isOk
@@ -45,7 +45,7 @@ class UserControllerTest(client: WebTestClient, val userRepository: UserReposito
                     client
                         .doPost(
                             "/api/signup",
-                            request = AuthRequest(id = "test", password = "password")
+                            request = SignUpRequest(id = "test", password = "password")
                         )
                         .expectStatus()
                         .isBadRequest

@@ -43,7 +43,7 @@ class SpringDataUserRepositoryTest(
                 userRepository.create(id = "test1", password = "testPassword")
                 it("해당 유저를 리턴한다.") {
                     userRepository.find("test1") shouldBe
-                        User(id = "test1", point = 0, rank = Rank.BRONZE)
+                        User(id = "test1", point = 0, rank = Rank.BRONZE, password = "testPassword")
                 }
             }
             context("해당 유저가 존재하지 않는다면") {

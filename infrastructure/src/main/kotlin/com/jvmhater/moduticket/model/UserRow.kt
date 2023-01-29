@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Transient
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
+// clustering index 성능 개선 필요
 @Table("users")
 data class UserRow(
     @Id @Column("id") override val rowId: String,
@@ -31,6 +32,7 @@ data class UserRow(
                             message = "올바르지 않은 등급의 유저입니다. 해당 유저 id : $rowId, rank: $rank"
                         )
                 },
-            point = point
+            point = point,
+            password = password
         )
 }

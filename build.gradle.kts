@@ -47,7 +47,6 @@ allprojects {
 
         /* test fixtures */
         testFixturesImplementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
-        runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.77.Final:osx-aarch_64")
     }
 
     dependencyManagement {
