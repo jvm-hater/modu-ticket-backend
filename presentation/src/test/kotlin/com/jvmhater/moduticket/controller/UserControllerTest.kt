@@ -73,7 +73,7 @@ class UserControllerTest(client: WebTestClient, val userRepository: UserReposito
             context("존재하는 유저의 정보가 들어오면") {
                 userRepository.create("testId", "password")
                 it("해당 유저를 삭제한다") {
-                    client.doDelete("$baseUrl/testId", mapOf("id" to "testId")).expectStatus().isOk
+                    client.doDelete("$baseUrl/testId", mapOf("id" to "testId")).expectStatus().isNoContent
                 }
             }
             context("존재하지 않는 유저라면") {
