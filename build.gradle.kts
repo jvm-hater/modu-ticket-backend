@@ -88,11 +88,15 @@ tasks {
         useJUnitPlatform()
         finalizedBy(jacocoTestReport)
     }
+    jacoco{
+        toolVersion = "0.8.8"
+    }
     jacocoTestReport {
         reports {
             dependsOn(test)
             xml.required.set(true)
-            xml.outputLocation.set(file("$buildDir/reports/jacoco"))
+            csv.required.set(true)
+            html.required.set(false)
         }
     }
 }
