@@ -3,7 +3,6 @@ package com.jvmhater.moduticket.controller
 import com.jvmhater.moduticket.dto.request.CreateCouponRequest
 import com.jvmhater.moduticket.dto.request.UpdateCouponRequest
 import com.jvmhater.moduticket.dto.response.CouponResponse
-import com.jvmhater.moduticket.dto.response.IssueCouponResponse
 import com.jvmhater.moduticket.service.CouponService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
@@ -58,12 +57,10 @@ class CouponController(val couponService: CouponService) {
         couponService.delete(couponId)
     }
 
-    /*
-    TODO: Authorization 헤더에 있는 JWT 토큰의 페이 로드(user_id)를 토대로 아규먼트 리졸버에게 넘겨서 User를 받아와야 합니다.
-     */
     @Operation(description = "할인 쿠폰을 특정 유저에게 발급한다.")
     @PostMapping("/{coupon_id}")
-    suspend fun issueCoupon(@PathVariable("coupon_id") couponId: String): IssueCouponResponse {
-        return IssueCouponResponse()
+    suspend fun issueCoupon(@PathVariable("coupon_id") couponId: String): CouponResponse {
+        val userId = "userId" // TODO: JWT 토큰 페이로드에서 user_id 가져오는 로직 필요.
+        return CouponResponse.from(couponService.issueCoupon(userId, couponId))
     }
 }

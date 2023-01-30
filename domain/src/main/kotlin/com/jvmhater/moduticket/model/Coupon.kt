@@ -14,6 +14,11 @@ data class Coupon(
     val issuableQuantity: Int,
 ) {
     companion object {
-        const val ID_PREFIX = "coupon-id-"
+        const val ID_PREFIX = "coupon-"
+        const val MIN_ISSUABLE_QUANTITY = 1
+    }
+
+    fun isIssueCoupon(): Boolean {
+        return issuableQuantity >= MIN_ISSUABLE_QUANTITY
     }
 }

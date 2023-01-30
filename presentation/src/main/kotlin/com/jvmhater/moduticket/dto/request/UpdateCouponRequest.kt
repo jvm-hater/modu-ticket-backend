@@ -4,7 +4,7 @@ import com.jvmhater.moduticket.model.ConcertCategory
 import com.jvmhater.moduticket.model.Coupon
 import java.time.LocalDateTime
 
-class UpdateCouponRequest(
+data class UpdateCouponRequest(
     val name: String,
     val discountRate: Int,
     val concertCategory: ConcertCategory,
