@@ -5,7 +5,7 @@ import com.jvmhater.moduticket.util.generateId
 import java.time.LocalDateTime
 
 data class Concert(
-    val id: String = generateId(Coupon.ID_PREFIX),
+    val id: String = generateId(ID_PREFIX),
     val name: String,
     val place: String,
     val startDate: LocalDateTime,

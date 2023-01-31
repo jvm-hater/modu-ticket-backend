@@ -1,7 +1,9 @@
 package com.jvmhater.moduticket.controller
 
+import com.jvmhater.moduticket.dto.request.CreateCouponRequest
 import com.jvmhater.moduticket.dto.response.ConcertResponse
 import com.jvmhater.moduticket.dto.response.ConcertsResponse
+import com.jvmhater.moduticket.model.vo.ConcertCategory
 import com.jvmhater.moduticket.util.createHandle
 import com.jvmhater.moduticket.util.deleteHandle
 import com.jvmhater.moduticket.util.handle
@@ -15,7 +17,10 @@ class ConcertController {
 
     @Operation(description = "콘서트를 조회한다.")
     @GetMapping
-    suspend fun viewConcerts(): ResponseEntity<ConcertsResponse> = handle { TODO() }
+    suspend fun viewConcerts(
+        @RequestParam("category") category: ConcertCategory,
+        @RequestParam("search_text") searchText: String
+    ): ResponseEntity<ConcertsResponse> = handle { TODO() }
 
     @Operation(description = "콘서트 목록을 조회한다.")
     @GetMapping("/{concert_id}")
@@ -25,9 +30,14 @@ class ConcertController {
 
     @Operation(description = "콘서트를 생성한다.")
     @PostMapping
-    suspend fun createConcert(): ResponseEntity<ConcertResponse> = createHandle { TODO() }
+    suspend fun createConcert(
+        @RequestBody request: CreateCouponRequest,
+    ): ResponseEntity<ConcertResponse> = createHandle { TODO() }
 
     @Operation(description = "콘서트를 삭제한다.")
-    @DeleteMapping
-    suspend fun deleteConcert(): ResponseEntity<Unit> = deleteHandle { TODO() }
+    @DeleteMapping("/{concert_id}")
+    suspend fun deleteConcert(@PathVariable("concert_id") concertId: String): ResponseEntity<Unit> =
+        deleteHandle {
+            TODO()
+        }
 }
