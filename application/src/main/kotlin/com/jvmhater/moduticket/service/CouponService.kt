@@ -3,7 +3,6 @@ package com.jvmhater.moduticket.service
 import com.jvmhater.moduticket.exception.DomainException
 import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.repository.CouponRepository
-import com.jvmhater.moduticket.repository.IssuedCouponRepository
 import com.jvmhater.moduticket.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -11,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class CouponService(
     val couponRepository: CouponRepository,
-    val userRepository: UserRepository,
-    val issuedCouponRepository: IssuedCouponRepository,
+    val userRepository: UserRepository
 ) {
 
     @Transactional(readOnly = true)
@@ -55,7 +53,6 @@ class CouponService(
             throw DomainException.InvalidArgumentException("이미 해당 쿠폰을 발급했습니다.")
         }
 
-        val issuedCoupon = issuedCouponRepository.create(coupon, user)
-        return issuedCoupon.coupon
+        return couponRepository.issue(userId, coupon)
     }
 }

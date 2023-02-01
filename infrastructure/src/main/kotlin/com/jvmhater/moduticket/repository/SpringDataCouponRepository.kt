@@ -3,6 +3,7 @@ package com.jvmhater.moduticket.repository
 import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.model.CouponRow
+import com.jvmhater.moduticket.model.IssuedCouponRow
 import com.jvmhater.moduticket.model.toRow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -14,8 +15,10 @@ import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-class SpringDataCouponRepository(private val r2dbcCouponRepository: R2dbcCouponRepository) :
-    CouponRepository {
+class SpringDataCouponRepository(
+    private val r2dbcCouponRepository: R2dbcCouponRepository,
+    private val r2dbcIssuedCouponRepository: R2dbcIssuedCouponRepository,
+) : CouponRepository {
 
     override suspend fun findCoupons(name: String): List<Coupon> {
         try {
@@ -62,9 +65,24 @@ class SpringDataCouponRepository(private val r2dbcCouponRepository: R2dbcCouponR
         }
         r2dbcCouponRepository.deleteById(id)
     }
+
+    override suspend fun issue(userId: String, coupon: Coupon): Coupon {
+        val issuedCoupon = update(coupon.copy(issuableQuantity = coupon.issuableQuantity - 1))
+        r2dbcIssuedCouponRepository.save(
+            IssuedCouponRow.of(
+                isNewRow = true,
+                userId = userId,
+                couponId = issuedCoupon.id
+            )
+        )
+        return issuedCoupon
+    }
 }
 
 @Repository
 interface R2dbcCouponRepository : CoroutineCrudRepository<CouponRow, String> {
     fun findByName(name: String): Flow<CouponRow>
 }
+
+@Repository
+interface R2dbcIssuedCouponRepository : CoroutineCrudRepository<IssuedCouponRow, String>
