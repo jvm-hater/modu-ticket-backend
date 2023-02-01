@@ -90,15 +90,18 @@ class CouponControllerTest(client: WebTestClient, val couponRepository: CouponRe
 
         describe("#createCoupon") {
             context("신규 쿠폰이 주어지면") {
-                val coupon = CouponFixture.generate()
+                val coupon = CouponFixture.generate(id = "create-id")
 
                 it("해당하는 쿠폰을 생성한다.") {
                     val createCouponRequest = CreateCouponRequest.from(coupon)
+                    val expectedCouponResponse = CouponResponse.from(coupon)
 
                     client
                         .doPost(url = baseUrl, request = createCouponRequest)
                         .expectStatus()
                         .isCreated
+                        .expectBody()
+                        .json(expectedCouponResponse.toJson())
                 }
             }
         }
