@@ -43,13 +43,13 @@ class CouponService(
     suspend fun issueCoupon(userId: String, couponId: String): Coupon {
         val coupon = couponRepository.find(couponId)
 
-        if (coupon.isIssueCoupon()) {
+        if (!coupon.isIssueCoupon()) {
             throw DomainException.InvalidArgumentException("해당 쿠폰 발급은 마감되었습니다.")
         }
 
         val user = userRepository.findWithIssuedCoupon(userId)
 
-        if (user.hasCoupon(coupon)) {
+        if (user.coupons.contains(coupon)) {
             throw DomainException.InvalidArgumentException("이미 해당 쿠폰을 발급했습니다.")
         }
 

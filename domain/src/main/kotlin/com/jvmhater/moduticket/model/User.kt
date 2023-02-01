@@ -10,8 +10,4 @@ data class User(
     companion object {
         const val ID_PREFIX = "user-"
     }
-
-    fun hasCoupon(coupon: Coupon): Boolean {
-        return coupons.contains(coupon)
-    }
 }
