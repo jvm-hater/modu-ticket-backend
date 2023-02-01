@@ -14,24 +14,13 @@ data class UserRow(
     @Transient @Value("null") override val isNewRow: Boolean = false,
     val password: String,
     val point: Int = 0,
-    @Column("user_rank") val rank: String = Rank.BRONZE.name,
+    @Column("user_rank") val rank: Rank = Rank.BRONZE,
 ) : Row<String> {
 
     fun toDomain(): User =
         User(
             id = rowId,
-            rank =
-                when (rank) {
-                    Rank.BRONZE.name -> Rank.BRONZE
-                    Rank.SILVER.name -> Rank.SILVER
-                    Rank.GOLD.name -> Rank.GOLD
-                    Rank.PLATINUM.name -> Rank.PLATINUM
-                    Rank.DIAMOND.name -> Rank.DIAMOND
-                    else ->
-                        throw RepositoryException.DataIntegrityException(
-                            message = "올바르지 않은 등급의 유저입니다. 해당 유저 id : $rowId, rank: $rank"
-                        )
-                },
+            rank = rank,
             point = point,
             password = password
         )

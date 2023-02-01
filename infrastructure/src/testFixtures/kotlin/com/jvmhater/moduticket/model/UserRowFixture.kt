@@ -6,7 +6,7 @@ object UserRowFixture {
     fun generate(
         rowId: String = generateId(),
         password: String = "password",
-        rank: String = "DIAMOND",
+        rank: Rank = Rank.DIAMOND,
         point: Int = 1000
     ): UserRow {
         return UserRow(rowId = rowId, password = password, rank = rank, point = point)
