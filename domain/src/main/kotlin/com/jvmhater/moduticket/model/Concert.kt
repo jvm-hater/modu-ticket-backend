@@ -4,17 +4,16 @@ import com.jvmhater.moduticket.model.vo.ConcertCategory
 import com.jvmhater.moduticket.util.generateId
 import java.time.LocalDateTime
 
-data class Coupon(
+data class Concert(
     val id: String = generateId(ID_PREFIX),
     val name: String,
-    val discountRate: Int,
-    val concertCategory: ConcertCategory,
-    val maxDiscountAmount: Int,
-    val useStartDate: LocalDateTime,
-    val useEndDate: LocalDateTime,
-    val issuableQuantity: Int,
+    val place: String,
+    val startDate: LocalDateTime,
+    val time: Int,
+    val category: ConcertCategory,
+    val seats: List<Seat>
 ) {
     companion object {
-        const val ID_PREFIX = "coupon-id-"
+        const val ID_PREFIX = "concert-id-"
     }
 }
