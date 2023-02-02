@@ -1,6 +1,5 @@
 package com.jvmhater.moduticket.model
 
-import com.jvmhater.moduticket.model.vo.ConcertCategory
 import com.jvmhater.moduticket.util.generateId
 import java.time.LocalDateTime
 

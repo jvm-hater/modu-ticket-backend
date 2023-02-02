@@ -1,7 +1,7 @@
 package com.jvmhater.moduticket.dto.response
 
+import com.jvmhater.moduticket.model.ConcertCategory
 import com.jvmhater.moduticket.model.Coupon
-import com.jvmhater.moduticket.model.vo.ConcertCategory
 import java.time.LocalDateTime
 
 class CouponResponse(

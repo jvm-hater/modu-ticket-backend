@@ -1,4 +1,4 @@
-package com.jvmhater.moduticket.model.vo
+package com.jvmhater.moduticket.model
 
 enum class ConcertCategory {
     ROCK,
