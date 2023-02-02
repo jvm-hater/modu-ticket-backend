@@ -6,6 +6,5 @@ CREATE TABLE `seat`
     `amount`              bigint       NOT NULL,
     `total_quantity`      int          NOT NULL,
     `quantity_left`       int          NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`concert_id`) REFERENCES concert (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
