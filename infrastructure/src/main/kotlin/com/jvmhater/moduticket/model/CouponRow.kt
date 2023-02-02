@@ -1,5 +1,6 @@
 package com.jvmhater.moduticket.model
 
+import com.jvmhater.moduticket.model.vo.ConcertCategory
 import java.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.annotation.Id

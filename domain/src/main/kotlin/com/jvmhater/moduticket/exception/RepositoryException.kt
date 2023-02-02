@@ -17,4 +17,9 @@ sealed class RepositoryException(
         override val cause: Throwable? = null,
         override val message: String,
     ) : RepositoryException(message, cause)
+
+    data class DataIntegrityException(
+        override val cause: Throwable? = null,
+        override val message: String,
+    ) : RepositoryException(message, cause)
 }
