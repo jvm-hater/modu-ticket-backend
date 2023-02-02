@@ -69,11 +69,7 @@ class SpringDataCouponRepository(
     override suspend fun issue(userId: String, coupon: Coupon): Coupon {
         val issuedCoupon = update(coupon.copy(issuableQuantity = coupon.issuableQuantity - 1))
         r2dbcIssuedCouponRepository.save(
-            IssuedCouponRow.of(
-                isNewRow = true,
-                userId = userId,
-                couponId = issuedCoupon.id
-            )
+            IssuedCouponRow.of(isNewRow = true, userId = userId, couponId = issuedCoupon.id)
         )
         return issuedCoupon
     }

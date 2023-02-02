@@ -88,9 +88,7 @@ tasks {
         useJUnitPlatform()
         finalizedBy(jacocoTestReport)
     }
-    jacoco{
-        toolVersion = "0.8.8"
-    }
+    jacoco { toolVersion = "0.8.8" }
     jacocoTestReport {
         reports {
             dependsOn(test)

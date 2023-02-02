@@ -16,6 +16,7 @@ import java.time.LocalDateTime
 @TestContainerTest
 class SpringDataCouponRepositoryTest(
     r2dbcCouponRepository: R2dbcCouponRepository,
+    r2dbcIssuedCouponRepository: R2dbcIssuedCouponRepository
 ) : DescribeSpec() {
     override fun listeners() =
         listOf(ConstantNowTestListener(LocalDateTime.of(2023, 1, 24, 10, 15, 30)))
@@ -24,7 +25,8 @@ class SpringDataCouponRepositoryTest(
         TestMySQLContainer.sql(readResourceFile("ddl/truncate.sql"))
     }
 
-    private val couponRepository = SpringDataCouponRepository(r2dbcCouponRepository)
+    private val couponRepository =
+        SpringDataCouponRepository(r2dbcCouponRepository, r2dbcIssuedCouponRepository)
 
     init {
         describe("#findCoupons") {

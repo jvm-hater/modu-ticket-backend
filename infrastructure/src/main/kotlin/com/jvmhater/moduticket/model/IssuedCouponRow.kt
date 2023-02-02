@@ -16,11 +16,7 @@ class IssuedCouponRow(
 ) : Row<String> {
     companion object {
         fun of(isNewRow: Boolean = false, userId: String, couponId: String): IssuedCouponRow {
-            return IssuedCouponRow(
-                isNewRow = isNewRow,
-                userId = userId,
-                couponId = couponId
-            )
+            return IssuedCouponRow(isNewRow = isNewRow, userId = userId, couponId = couponId)
         }
     }
 }

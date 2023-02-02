@@ -8,38 +8,29 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class CouponService(
-    val couponRepository: CouponRepository,
-    val userRepository: UserRepository
-) {
+class CouponService(val couponRepository: CouponRepository, val userRepository: UserRepository) {
 
-    @Transactional(readOnly = true)
     suspend fun findCoupons(name: String): List<Coupon> {
         return couponRepository.findCoupons(name)
     }
 
-    @Transactional(readOnly = true)
     suspend fun find(id: String): Coupon {
         return couponRepository.find(id)
     }
 
-    @Transactional
     suspend fun create(coupon: Coupon): Coupon {
         return couponRepository.create(coupon)
     }
 
-    @Transactional
     suspend fun update(coupon: Coupon): Coupon {
         return couponRepository.update(coupon)
     }
 
-    @Transactional
     suspend fun delete(id: String) {
         couponRepository.delete(id)
     }
 
     // TODO: 추후 동시성 검증을 거쳐야 합니다.
-    @Transactional
     suspend fun issueCoupon(userId: String, couponId: String): Coupon {
         val coupon = couponRepository.find(couponId)
 

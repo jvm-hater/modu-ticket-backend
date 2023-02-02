@@ -161,9 +161,7 @@ class CouponServiceTest : DescribeSpec() {
                 context("쿠폰 발급 수량이 양수고") {
                     val coupon = CouponFixture.generate(issuableQuantity = 1)
 
-                    beforeEach {
-                        coEvery { couponRepository.find(coupon.id) } returns coupon
-                    }
+                    beforeEach { coEvery { couponRepository.find(coupon.id) } returns coupon }
 
                     context("유저가 이미 발급할 쿠폰을 보유하고 있으면") {
                         val user = UserFixture.generate(coupons = listOf(coupon))
@@ -178,12 +176,16 @@ class CouponServiceTest : DescribeSpec() {
 
                     context("유저가 발급할 쿠폰을 보유하고 있지 않으면") {
                         val user = UserFixture.generate()
-                        val issuedCoupon = coupon.copy(issuableQuantity = coupon.issuableQuantity - 1)
+                        val issuedCoupon =
+                            coupon.copy(issuableQuantity = coupon.issuableQuantity - 1)
                         it("쿠폰을 발급한다.") {
                             coEvery { userRepository.findWithIssuedCoupon(user.id) } returns user
-                            coEvery { couponRepository.issue(userId = user.id, coupon = coupon) } returns issuedCoupon
+                            coEvery {
+                                couponRepository.issue(userId = user.id, coupon = coupon)
+                            } returns issuedCoupon
 
-                            val actual = couponService.issueCoupon(userId = user.id, couponId = coupon.id)
+                            val actual =
+                                couponService.issueCoupon(userId = user.id, couponId = coupon.id)
                             actual shouldBe issuedCoupon
                         }
                     }
