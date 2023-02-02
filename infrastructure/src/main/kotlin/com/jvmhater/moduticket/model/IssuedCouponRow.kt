@@ -13,10 +13,4 @@ class IssuedCouponRow(
     @Transient @Value("null") override val isNewRow: Boolean = false,
     val userId: String,
     val couponId: String
-) : Row<String> {
-    companion object {
-        fun of(isNewRow: Boolean = false, userId: String, couponId: String): IssuedCouponRow {
-            return IssuedCouponRow(isNewRow = isNewRow, userId = userId, couponId = couponId)
-        }
-    }
-}
+) : Row<String>

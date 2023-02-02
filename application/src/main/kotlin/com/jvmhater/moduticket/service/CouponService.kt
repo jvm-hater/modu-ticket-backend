@@ -5,7 +5,6 @@ import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.repository.CouponRepository
 import com.jvmhater.moduticket.repository.UserRepository
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CouponService(val couponRepository: CouponRepository, val userRepository: UserRepository) {
