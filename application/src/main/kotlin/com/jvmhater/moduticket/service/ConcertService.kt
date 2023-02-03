@@ -1,23 +1,31 @@
 package com.jvmhater.moduticket.service
 
 import com.jvmhater.moduticket.model.Concert
+import com.jvmhater.moduticket.model.query.ConcertSearchQuery
+import com.jvmhater.moduticket.model.query.Page
 import com.jvmhater.moduticket.repository.ConcertRepository
-import com.jvmhater.moduticket.repository.SeatRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
-class ConcertService(
-    private val concertRepository: ConcertRepository,
-    private val seatRepository: SeatRepository
-) {
+class ConcertService(private val concertRepository: ConcertRepository) {
 
-    suspend fun findConcerts(): List<Concert> = TODO()
+    @Transactional(readOnly = true)
+    suspend fun findConcerts(query: ConcertSearchQuery, page: Page): List<Concert> {
+        return concertRepository.findConcerts(query, page)
+    }
 
-    suspend fun find(): Concert = TODO()
+    @Transactional(readOnly = true)
+    suspend fun find(id: String): Concert {
+        return concertRepository.find(id)
+    }
 
-    suspend fun create(): Concert = TODO()
+    suspend fun create(concert: Concert): Concert {
+        return concertRepository.create(concert)
+    }
 
-    suspend fun delete(): Unit = TODO()
+    suspend fun delete(id: String) {
+        concertRepository.delete(id)
+    }
 }

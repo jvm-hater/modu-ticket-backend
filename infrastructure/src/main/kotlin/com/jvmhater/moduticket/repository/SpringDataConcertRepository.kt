@@ -33,7 +33,7 @@ class SpringDataConcertRepository(
                                 .like("%${query.searchText}%")
                         )
                         .limit(page.size)
-                        .offset(page.page.toLong())
+                        .offset(page.page)
                 )
                 .flow()
                 .toList()
@@ -81,5 +81,4 @@ class SpringDataConcertRepository(
         }
 }
 
-@Repository
-interface R2dbcConcertRepository : CoroutineCrudRepository<ConcertRow, String>
+@Repository interface R2dbcConcertRepository : CoroutineCrudRepository<ConcertRow, String>
