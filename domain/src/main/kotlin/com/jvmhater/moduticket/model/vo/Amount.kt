@@ -9,3 +9,5 @@ value class Amount(val value: Long) {
 
     operator fun compareTo(b: Amount): Int = (value - b.value).toInt()
 }
+
+fun Long.toAmount(): Amount = Amount(value = this)

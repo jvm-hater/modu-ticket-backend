@@ -1,6 +1,5 @@
 package com.jvmhater.moduticket.model
 
-import com.jvmhater.moduticket.exception.RepositoryException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Transient
@@ -17,11 +16,5 @@ data class UserRow(
     @Column("user_rank") val rank: Rank = Rank.BRONZE,
 ) : Row<String> {
 
-    fun toDomain(): User =
-        User(
-            id = rowId,
-            rank = rank,
-            point = point,
-            password = password
-        )
+    fun toDomain(): User = User(id = rowId, rank = rank, point = point, password = password)
 }

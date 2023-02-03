@@ -7,3 +7,5 @@ value class Quantity(val value: Int) {
 
     operator fun minus(b: Quantity) = Quantity(value - b.value)
 }
+
+fun Int.toQuantity(): Quantity = Quantity(value = this)

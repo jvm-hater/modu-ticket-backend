@@ -11,9 +11,13 @@ data class Concert(
     val startDate: LocalDateTime,
     val time: Int,
     val category: ConcertCategory,
-    val seats: List<Seat>
+    val seats: List<Seat> = emptyList()
 ) {
     companion object {
         const val ID_PREFIX = "concert-id-"
+    }
+
+    fun addSeats(seats: List<Seat>): Concert {
+        return this.copy(seats = seats)
     }
 }
