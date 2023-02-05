@@ -71,23 +71,16 @@ subprojects {
         test {
             useJUnitPlatform()
             finalizedBy(jacocoTestReport)
+            extensions.configure(JacocoTaskExtension::class) {
+                exclude( "**/configuration/**",
+                    "**/exception/**")
+            }
         }
-        jacoco{
+        jacoco {
             toolVersion = "0.8.8"
         }
         jacocoTestReport {
-            afterEvaluate {
-                classDirectories.setFrom(
-                    files(classDirectories.files.map {
-                        fileTree(it) {
-                            exclude(
-                                "**/configuration/**",
-                                "**/exception/**"
-                            )
-                        }
-                    })
-                )
-            }
+            dependsOn(test)
             reports {
                 dependsOn(test)
                 xml.required.set(true)
