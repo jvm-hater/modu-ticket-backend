@@ -1,15 +1,28 @@
 package com.jvmhater.moduticket.model
 
+import com.jvmhater.moduticket.exception.DomainException
+import io.kotest.assertions.throwables.shouldNotThrow
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.extensions.time.ConstantNowTestListener
+import io.mockk.coEvery
+import java.time.LocalDateTime
 
 class CouponTest : DescribeSpec() {
 
+    private val fixedLocalDateTime = LocalDateTime.of(2023, 1, 24, 10, 15, 30)
+
+    override fun listeners() = listOf(ConstantNowTestListener(fixedLocalDateTime))
+
     init {
-        describe("#isIssueCoupon") {
+        describe("#validateIssueCoupon") {
             context("발급 수량이 양수면") {
                 val coupon = CouponFixture.generate(issuableQuantity = 1)
-                it("true를 반환한다.") { coupon.isIssueCoupon() shouldBe true }
+                it("예외가 발생하지 않는다.") {
+                    shouldNotThrow<DomainException.InvalidArgumentException> {
+                        coupon.validateIssueCoupon()
+                    }
+                }
             }
 
             context("발급 수량이 0보다 작거나 같으면") {
@@ -18,7 +31,47 @@ class CouponTest : DescribeSpec() {
                         CouponFixture.generate(issuableQuantity = 0),
                         CouponFixture.generate(issuableQuantity = -1)
                     )
-                it("false를 반환한다.") { coupons.forEach { it.isIssueCoupon() shouldBe false } }
+                it("예외를 던진다.") {
+                    coupons.forEach {
+                        shouldThrow<DomainException.InvalidArgumentException> {
+                            it.validateIssueCoupon()
+                        }
+                    }
+                }
+            }
+
+            context("발급 시작 기한이 현재보다 늦거나, 발급 마감 기한이 현재보다 빠르면") {
+                it("예외를 던진다.") {
+                    coEvery {
+                        LocalDateTime.now()
+                    } returns fixedLocalDateTime
+
+                    val coupons = listOf(
+                        CouponFixture.generate(useStartDate = fixedLocalDateTime.plusDays(1L)),
+                        CouponFixture.generate(useEndDate = fixedLocalDateTime.minusDays(1L))
+                    )
+                    coupons.forEach {
+                        shouldThrow<DomainException.InvalidArgumentException> {
+                            it.validateIssueCoupon()
+                        }
+                    }
+                }
+            }
+
+            context("현재 시각이 발급 기한 안에 있으면") {
+                it("예외가 발생하지 않는다.") {
+                    coEvery {
+                        LocalDateTime.now()
+                    } returns fixedLocalDateTime
+
+                    val coupon = CouponFixture.generate(
+                        useStartDate = fixedLocalDateTime.minusDays(1L),
+                        useEndDate = fixedLocalDateTime.plusDays(1L)
+                    )
+                    shouldNotThrow<DomainException.InvalidArgumentException> {
+                        coupon.validateIssueCoupon()
+                    }
+                }
             }
         }
     }

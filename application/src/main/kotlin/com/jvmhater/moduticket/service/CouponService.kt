@@ -34,10 +34,7 @@ class CouponService(val couponRepository: CouponRepository, val userRepository: 
     // TODO: 추후 동시성 검증을 거쳐야 합니다.
     suspend fun issueCoupon(userId: String, couponId: String): Coupon {
         val coupon = couponRepository.find(couponId)
-
-        if (!coupon.isIssueCoupon()) {
-            throw DomainException.InvalidArgumentException("해당 쿠폰 발급은 마감되었습니다.")
-        }
+        coupon.validateIssueCoupon()
 
         val user = userRepository.findWithIssuedCoupon(userId)
 
