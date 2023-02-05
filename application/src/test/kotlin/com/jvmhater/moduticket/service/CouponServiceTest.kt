@@ -20,8 +20,9 @@ class CouponServiceTest : DescribeSpec() {
     private lateinit var userRepository: UserRepository
     private lateinit var couponService: CouponService
 
-    override fun listeners() =
-        listOf(ConstantNowTestListener(LocalDateTime.of(2023, 1, 24, 10, 15, 30)))
+    private val fixedLocalDateTime = LocalDateTime.of(2023, 1, 24, 10, 15, 30)
+
+    override fun listeners() = listOf(ConstantNowTestListener(fixedLocalDateTime))
 
     override suspend fun beforeEach(testCase: TestCase) {
         couponRepository = mockk()
@@ -147,47 +148,41 @@ class CouponServiceTest : DescribeSpec() {
             }
 
             context("존재하는 쿠폰 ID가 주어지고") {
-                context("쿠폰 발급 수량이 0개 이하면") {
-                    val coupon = CouponFixture.generate(issuableQuantity = 0)
+                val coupon = CouponFixture.generate(
+                    issuableQuantity = 1,
+                    useStartDate = fixedLocalDateTime.minusDays(1L),
+                    useEndDate = fixedLocalDateTime.plusDays(1L)
+                )
+
+                beforeEach {
+                    coEvery { couponRepository.find(coupon.id) } returns coupon
+                    coEvery { LocalDateTime.now() } returns fixedLocalDateTime
+                }
+
+                context("유저가 이미 발급할 쿠폰을 보유하고 있으면") {
+                    val user = UserFixture.generate(coupons = listOf(coupon))
                     it("쿠폰을 발급할 수 없다.") {
-                        coEvery { couponRepository.find(coupon.id) } returns coupon
+                        coEvery { userRepository.findWithIssuedCoupon(user.id) } returns user
 
                         shouldThrow<DomainException.InvalidArgumentException> {
-                            couponService.issueCoupon(userId = "", couponId = coupon.id)
+                            couponService.issueCoupon(userId = user.id, couponId = coupon.id)
                         }
                     }
                 }
 
-                context("쿠폰 발급 수량이 양수고") {
-                    val coupon = CouponFixture.generate(issuableQuantity = 1)
+                context("유저가 발급할 쿠폰을 보유하고 있지 않으면") {
+                    val user = UserFixture.generate()
+                    val issuedCoupon =
+                        coupon.copy(issuableQuantity = coupon.issuableQuantity - 1)
+                    it("쿠폰을 발급한다.") {
+                        coEvery { userRepository.findWithIssuedCoupon(user.id) } returns user
+                        coEvery {
+                            couponRepository.issue(userId = user.id, coupon = coupon)
+                        } returns issuedCoupon
 
-                    beforeEach { coEvery { couponRepository.find(coupon.id) } returns coupon }
-
-                    context("유저가 이미 발급할 쿠폰을 보유하고 있으면") {
-                        val user = UserFixture.generate(coupons = listOf(coupon))
-                        it("쿠폰을 발급할 수 없다.") {
-                            coEvery { userRepository.findWithIssuedCoupon(user.id) } returns user
-
-                            shouldThrow<DomainException.InvalidArgumentException> {
-                                couponService.issueCoupon(userId = user.id, couponId = coupon.id)
-                            }
-                        }
-                    }
-
-                    context("유저가 발급할 쿠폰을 보유하고 있지 않으면") {
-                        val user = UserFixture.generate()
-                        val issuedCoupon =
-                            coupon.copy(issuableQuantity = coupon.issuableQuantity - 1)
-                        it("쿠폰을 발급한다.") {
-                            coEvery { userRepository.findWithIssuedCoupon(user.id) } returns user
-                            coEvery {
-                                couponRepository.issue(userId = user.id, coupon = coupon)
-                            } returns issuedCoupon
-
-                            val actual =
-                                couponService.issueCoupon(userId = user.id, couponId = coupon.id)
-                            actual shouldBe issuedCoupon
-                        }
+                        val actual =
+                            couponService.issueCoupon(userId = user.id, couponId = coupon.id)
+                        actual shouldBe issuedCoupon
                     }
                 }
             }
