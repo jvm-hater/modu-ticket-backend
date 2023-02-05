@@ -65,7 +65,27 @@ allprojects {
 }
 
 /* 서브 모듈 build.gradle 제어 */
-subprojects { tasks { test { useJUnitPlatform() } } }
+subprojects {
+    apply(plugin = "jacoco")
+    tasks {
+        test {
+            useJUnitPlatform()
+            finalizedBy(jacocoTestReport)
+        }
+        jacoco{
+            toolVersion = "0.8.8"
+        }
+        jacocoTestReport {
+            reports {
+                dependsOn(test)
+                xml.required.set(true)
+            }
+        }
+
+    }
+
+
+}
 
 /* build tasks */
 tasks {
@@ -82,22 +102,6 @@ tasks {
     assemble {
         dependsOn(spotlessApply)
         shouldRunAfter(spotlessApply)
-    }
-
-    test {
-        useJUnitPlatform()
-        finalizedBy(jacocoTestReport)
-    }
-    jacoco{
-        toolVersion = "0.8.8"
-    }
-    jacocoTestReport {
-        reports {
-            dependsOn(test)
-            xml.required.set(true)
-            csv.required.set(true)
-            html.required.set(false)
-        }
     }
 }
 
