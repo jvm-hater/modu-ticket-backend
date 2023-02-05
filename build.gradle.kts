@@ -76,15 +76,18 @@ subprojects {
             toolVersion = "0.8.8"
         }
         jacocoTestReport {
-            classDirectories.setFrom(
-                files(classDirectories.files.map {
-                    fileTree(it){
-                        exclude("**/configuration/**",
-                            "**/exception/**",
+            afterEvaluate {
+                classDirectories.setFrom(
+                    files(classDirectories.files.map {
+                        fileTree(it) {
+                            exclude(
+                                "**/configuration/**",
+                                "**/exception/**"
                             )
-                    }
-                })
-            )
+                        }
+                    })
+                )
+            }
             reports {
                 dependsOn(test)
                 xml.required.set(true)
