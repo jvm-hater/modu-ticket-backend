@@ -148,11 +148,12 @@ class CouponServiceTest : DescribeSpec() {
             }
 
             context("존재하는 쿠폰 ID가 주어지고") {
-                val coupon = CouponFixture.generate(
-                    issuableQuantity = 1,
-                    useStartDate = fixedLocalDateTime.minusDays(1L),
-                    useEndDate = fixedLocalDateTime.plusDays(1L)
-                )
+                val coupon =
+                    CouponFixture.generate(
+                        issuableQuantity = 1,
+                        useStartDate = fixedLocalDateTime.minusDays(1L),
+                        useEndDate = fixedLocalDateTime.plusDays(1L)
+                    )
 
                 beforeEach {
                     coEvery { couponRepository.find(coupon.id) } returns coupon
@@ -172,8 +173,7 @@ class CouponServiceTest : DescribeSpec() {
 
                 context("유저가 발급할 쿠폰을 보유하고 있지 않으면") {
                     val user = UserFixture.generate()
-                    val issuedCoupon =
-                        coupon.copy(issuableQuantity = coupon.issuableQuantity - 1)
+                    val issuedCoupon = coupon.copy(issuableQuantity = coupon.issuableQuantity - 1)
                     it("쿠폰을 발급한다.") {
                         coEvery { userRepository.findWithIssuedCoupon(user.id) } returns user
                         coEvery {

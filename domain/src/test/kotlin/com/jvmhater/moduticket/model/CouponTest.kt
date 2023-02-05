@@ -42,14 +42,13 @@ class CouponTest : DescribeSpec() {
 
             context("발급 시작 기한이 현재보다 늦거나, 발급 마감 기한이 현재보다 빠르면") {
                 it("예외를 던진다.") {
-                    coEvery {
-                        LocalDateTime.now()
-                    } returns fixedLocalDateTime
+                    coEvery { LocalDateTime.now() } returns fixedLocalDateTime
 
-                    val coupons = listOf(
-                        CouponFixture.generate(useStartDate = fixedLocalDateTime.plusDays(1L)),
-                        CouponFixture.generate(useEndDate = fixedLocalDateTime.minusDays(1L))
-                    )
+                    val coupons =
+                        listOf(
+                            CouponFixture.generate(useStartDate = fixedLocalDateTime.plusDays(1L)),
+                            CouponFixture.generate(useEndDate = fixedLocalDateTime.minusDays(1L))
+                        )
                     coupons.forEach {
                         shouldThrow<DomainException.InvalidArgumentException> {
                             it.validateIssueCoupon()
@@ -60,14 +59,13 @@ class CouponTest : DescribeSpec() {
 
             context("현재 시각이 발급 기한 안에 있으면") {
                 it("예외가 발생하지 않는다.") {
-                    coEvery {
-                        LocalDateTime.now()
-                    } returns fixedLocalDateTime
+                    coEvery { LocalDateTime.now() } returns fixedLocalDateTime
 
-                    val coupon = CouponFixture.generate(
-                        useStartDate = fixedLocalDateTime.minusDays(1L),
-                        useEndDate = fixedLocalDateTime.plusDays(1L)
-                    )
+                    val coupon =
+                        CouponFixture.generate(
+                            useStartDate = fixedLocalDateTime.minusDays(1L),
+                            useEndDate = fixedLocalDateTime.plusDays(1L)
+                        )
                     shouldNotThrow<DomainException.InvalidArgumentException> {
                         coupon.validateIssueCoupon()
                     }
