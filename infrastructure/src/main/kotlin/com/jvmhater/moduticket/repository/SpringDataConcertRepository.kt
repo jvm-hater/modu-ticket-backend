@@ -4,8 +4,8 @@ import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.model.*
 import com.jvmhater.moduticket.model.query.ConcertSearchQuery
 import com.jvmhater.moduticket.model.query.Page
+import com.jvmhater.moduticket.util.dbExceptionHandle
 import kotlinx.coroutines.flow.toList
-import org.springframework.dao.DataAccessException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.data.r2dbc.core.flow
@@ -22,7 +22,7 @@ class SpringDataConcertRepository(
     private val template: R2dbcEntityTemplate
 ) : ConcertRepository {
     override suspend fun findConcerts(query: ConcertSearchQuery, page: Page): List<Concert> =
-        try {
+        dbExceptionHandle {
             template
                 .select<ConcertRow>()
                 .matching(
@@ -38,47 +38,38 @@ class SpringDataConcertRepository(
                 .flow()
                 .toList()
                 .toDomains()
-        } catch (e: DataAccessException) {
-            throw RepositoryException.UnknownAccessFailure(e)
         }
 
-    override suspend fun find(id: String): Concert =
-        try {
-            val concertRow =
-                r2dbcConcertRepository.findById(id)
-                    ?: throw RepositoryException.RecordNotFound(message = "존재하지 않은 콘서트 ID 입니다.")
-            concertRow.toDomain()
-        } catch (e: DataAccessException) {
-            throw RepositoryException.UnknownAccessFailure(e)
-        }
+    override suspend fun find(id: String): Concert = dbExceptionHandle {
+        val concertRow =
+            r2dbcConcertRepository.findById(id)
+                ?: throw RepositoryException.RecordNotFound(message = "존재하지 않은 콘서트 ID 입니다.")
 
-    override suspend fun create(concert: Concert): Concert =
+        val seats = r2dbcSeatRepository.findByConcertId(id).toList().toDomains()
+
+        concertRow.toDomain().updateSeats(seats)
+    }
+
+    override suspend fun create(concert: Concert): Concert = dbExceptionHandle {
         try {
-            val concertRow = r2dbcConcertRepository.save(concert.toRow(isNewRow = true)).toDomain()
-            val seatRows =
+            val savedConcert =
+                r2dbcConcertRepository.save(concert.toRow(isNewRow = true)).toDomain()
+            val savedSeats =
                 r2dbcSeatRepository
-                    .saveAll(concert.seats.toRows(isNewRow = true, concertId = concertRow.id))
+                    .saveAll(concert.seats.toRows(isNewRow = true, concertId = savedConcert.id))
                     .toList()
                     .toDomains()
 
-            concertRow.addSeats(seatRows)
+            savedConcert.updateSeats(savedSeats)
         } catch (e: DataIntegrityViolationException) {
             throw RepositoryException.RecordAlreadyExisted(e, "콘서트 레코드가 이미 존재합니다.")
-        } catch (e: DataAccessException) {
-            throw RepositoryException.UnknownAccessFailure(e)
         }
+    }
 
-    override suspend fun delete(id: String) =
-        try {
-            if (!r2dbcConcertRepository.existsById(id)) {
-                throw RepositoryException.RecordNotFound(message = "존재하지 않는 콘서트 ID 입니다.")
-            }
-
-            r2dbcConcertRepository.deleteById(id)
-            r2dbcSeatRepository.deleteByConcertId(id)
-        } catch (e: DataAccessException) {
-            throw RepositoryException.UnknownAccessFailure(e)
-        }
+    override suspend fun delete(id: String) = dbExceptionHandle {
+        r2dbcConcertRepository.deleteById(id)
+        r2dbcSeatRepository.deleteByConcertId(id)
+    }
 }
 
 @Repository interface R2dbcConcertRepository : CoroutineCrudRepository<ConcertRow, String>

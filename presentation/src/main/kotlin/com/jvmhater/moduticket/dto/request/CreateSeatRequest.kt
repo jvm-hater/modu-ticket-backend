@@ -10,14 +10,14 @@ data class CreateSeatRequest(
     val amount: Long,
     val totalQuantity: Int,
     val quantityLeft: Int
-)
-
-fun CreateSeatRequest.toDomain(): Seat =
-    Seat(
-        tier = tier,
-        amount = amount.toAmount(),
-        totalQuantity = totalQuantity.toQuantity(),
-        quantityLeft = quantityLeft.toQuantity()
-    )
+) {
+    fun toDomain(): Seat =
+        Seat(
+            tier = tier,
+            amount = amount.toAmount(),
+            totalQuantity = totalQuantity.toQuantity(),
+            quantityLeft = quantityLeft.toQuantity()
+        )
+}
 
 fun List<CreateSeatRequest>.toDomains(): List<Seat> = this.map { it.toDomain() }

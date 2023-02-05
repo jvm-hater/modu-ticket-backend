@@ -18,16 +18,16 @@ data class SeatRow(
     val amount: Long,
     val totalQuantity: Int,
     val quantityLeft: Int
-) : Row<String>
-
-fun SeatRow.toDomain(): Seat =
-    Seat(
-        id = id,
-        tier = tier,
-        amount = amount.toAmount(),
-        totalQuantity = totalQuantity.toQuantity(),
-        quantityLeft = quantityLeft.toQuantity()
-    )
+) : Row<String> {
+    fun toDomain(): Seat =
+        Seat(
+            id = id,
+            tier = tier,
+            amount = amount.toAmount(),
+            totalQuantity = totalQuantity.toQuantity(),
+            quantityLeft = quantityLeft.toQuantity()
+        )
+}
 
 fun List<SeatRow>.toDomains(): List<Seat> = this.map { it.toDomain() }
 

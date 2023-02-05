@@ -17,7 +17,7 @@ data class Concert(
         const val ID_PREFIX = "concert-id-"
     }
 
-    fun addSeats(seats: List<Seat>): Concert {
+    fun updateSeats(seats: List<Seat>): Concert {
         return this.copy(seats = seats)
     }
 }
