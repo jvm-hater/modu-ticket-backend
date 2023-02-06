@@ -80,7 +80,12 @@ interface R2dbcCouponRepository : CoroutineCrudRepository<CouponRow, String> {
     fun findByName(name: String): Flow<CouponRow>
 
     @Query(
-        "SELECT coupon.* FROM coupon INNER JOIN issued_coupon ON coupon.id = issued_coupon.coupon_id WHERE issued_coupon.user_id = :userId"
+        """
+           SELECT coupon.* FROM coupon 
+           INNER JOIN issued_coupon 
+           ON coupon.id = issued_coupon.coupon_id 
+           WHERE issued_coupon.user_id = :userId 
+        """
     )
     fun findCouponInnerJoinIssuedCouponByUserId(userId: String): Flow<CouponRow>
 }

@@ -26,6 +26,7 @@ object createHandle {
 
 object deleteHandle {
     suspend inline operator fun invoke(crossinline f: suspend () -> Unit): ResponseEntity<Unit> {
+        f()
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 }
