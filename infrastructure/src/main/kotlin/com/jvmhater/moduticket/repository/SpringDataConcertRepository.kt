@@ -44,7 +44,6 @@ class SpringDataConcertRepository(
         val concertRow =
             r2dbcConcertRepository.findById(id)
                 ?: throw RepositoryException.RecordNotFound(message = "존재하지 않은 콘서트 ID 입니다.")
-
         val seats = r2dbcSeatRepository.findByConcertId(id).toList().toDomains()
 
         concertRow.toDomain().updateSeats(seats)
