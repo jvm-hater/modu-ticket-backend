@@ -14,24 +14,6 @@ class UserServiceTest : DescribeSpec() {
     private val userService = UserService(userRepository)
 
     init {
-        describe("#signup") {
-            context("When the request is valid") {
-                coEvery { userRepository.create("test", "password") } returns Unit
-                it("success") {
-                    val result = userService.signUp("test", "password")
-                    result shouldBe Unit
-                }
-            }
-            context("When the user already exists") {
-                coEvery { userRepository.create("test", "password") } throws
-                    RepositoryException.RecordAlreadyExisted(message = "이미 존재하는 유저입니다.")
-                it("throw RecordAlreadyExisted") {
-                    shouldThrow<RepositoryException.RecordAlreadyExisted> {
-                        userService.signUp("test", "password")
-                    }
-                }
-            }
-        }
         describe("#find") {
             context("When the user exist") {
                 val user = UserFixture.generate()

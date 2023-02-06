@@ -13,4 +13,8 @@ class AuthService(private val userRepository: UserRepository) {
             throw DomainException.InvalidArgumentException(message = "비밀번호가 일치하지 않습니다.")
         }
     }
+
+    suspend fun signUp(id: String, password: String) {
+        return userRepository.create(id, password)
+    }
 }

@@ -26,6 +26,8 @@ class GlobalExceptionHandler {
         return when (e) {
             is DomainException.InvalidArgumentException ->
                 ResponseEntity.status(HttpStatus.BAD_REQUEST)
-        }.body(ErrorResponse(e.message))
+            is DomainException.UnauthorizedRequestException ->
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        }.body(ErrorResponse(e.message ?: ""))
     }
 }

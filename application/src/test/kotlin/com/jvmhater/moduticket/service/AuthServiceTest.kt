@@ -42,5 +42,23 @@ class AuthServiceTest : DescribeSpec() {
                 }
             }
         }
+        describe("#signup") {
+            context("When the request is valid") {
+                coEvery { userRepository.create("test", "password") } returns Unit
+                it("success") {
+                    val result = authService.signUp("test", "password")
+                    result shouldBe Unit
+                }
+            }
+            context("When the user already exists") {
+                coEvery { userRepository.create("test", "password") } throws
+                        RepositoryException.RecordAlreadyExisted(message = "이미 존재하는 유저입니다.")
+                it("throw RecordAlreadyExisted") {
+                    shouldThrow<RepositoryException.RecordAlreadyExisted> {
+                        authService.signUp("test", "password")
+                    }
+                }
+            }
+        }
     }
 }

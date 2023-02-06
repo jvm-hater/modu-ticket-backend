@@ -11,12 +11,6 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api")
 class UserController(val userService: UserService) {
 
-    @Operation(description = "회원가입 한다.")
-    @PostMapping("/signup")
-    suspend fun signUp(@RequestBody request: SignUpRequest) {
-        userService.signUp(id = request.id, password = request.password)
-    }
-
     @Operation(description = "유저 정보를 id로 조회 한다.")
     @GetMapping("/users/{id}")
     suspend fun viewUser(@PathVariable("id") id: String): UserResponse {
