@@ -3,6 +3,7 @@ package com.jvmhater.moduticket.repository
 import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.model.User
 import com.jvmhater.moduticket.model.UserRow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.DataIntegrityViolationException
@@ -10,8 +11,10 @@ import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-class SpringDataUserRepository(private val r2dbcUserRepository: R2dbcUserRepository) :
-    UserRepository {
+class SpringDataUserRepository(
+    private val r2dbcUserRepository: R2dbcUserRepository,
+    private val r2dbcCouponRepository: R2dbcCouponRepository,
+) : UserRepository {
 
     override suspend fun create(id: String, password: String) {
         try {
@@ -33,7 +36,18 @@ class SpringDataUserRepository(private val r2dbcUserRepository: R2dbcUserReposit
     }
 
     override suspend fun findWithIssuedCoupon(id: String): User {
-        TODO("Not yet implemented")
+        try {
+            val user = find(id)
+            val coupons =
+                r2dbcCouponRepository
+                    .findCouponInnerJoinIssuedCouponByUserId(id)
+                    .map { it.toDomain() }
+                    .toList()
+
+            return user.copy(coupons = coupons)
+        } catch (e: DataAccessException) {
+            throw RepositoryException.UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
+        }
     }
 
     override suspend fun delete(id: String) {

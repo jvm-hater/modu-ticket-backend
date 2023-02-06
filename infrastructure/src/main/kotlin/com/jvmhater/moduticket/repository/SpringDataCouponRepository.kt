@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.toList
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.TransientDataAccessResourceException
+import org.springframework.data.r2dbc.repository.Query
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 
@@ -60,9 +61,8 @@ class SpringDataCouponRepository(
     }
 
     override suspend fun delete(id: String) {
-        if (!r2dbcCouponRepository.existsById(id)) {
-            throw RepositoryException.RecordNotFound(message = "존재하지 않는 쿠폰 ID 입니다.")
-        }
+        r2dbcCouponRepository.findById(id)
+            ?: throw RepositoryException.RecordNotFound(message = "존재하지 않는 쿠폰 ID 입니다.")
         r2dbcCouponRepository.deleteById(id)
     }
 
@@ -78,6 +78,11 @@ class SpringDataCouponRepository(
 @Repository
 interface R2dbcCouponRepository : CoroutineCrudRepository<CouponRow, String> {
     fun findByName(name: String): Flow<CouponRow>
+
+    @Query(
+        "SELECT coupon.* FROM coupon INNER JOIN issued_coupon ON coupon.id = issued_coupon.coupon_id WHERE issued_coupon.user_id = :userId"
+    )
+    fun findCouponInnerJoinIssuedCouponByUserId(userId: String): Flow<CouponRow>
 }
 
 @Repository

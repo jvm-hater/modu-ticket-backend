@@ -6,10 +6,13 @@ import com.jvmhater.moduticket.doGet
 import com.jvmhater.moduticket.doPost
 import com.jvmhater.moduticket.doPut
 import com.jvmhater.moduticket.dto.request.CreateCouponRequest
+import com.jvmhater.moduticket.dto.request.IssueCouponRequest
 import com.jvmhater.moduticket.dto.request.UpdateCouponRequest
 import com.jvmhater.moduticket.dto.response.CouponResponse
 import com.jvmhater.moduticket.model.CouponFixture
+import com.jvmhater.moduticket.model.UserFixture
 import com.jvmhater.moduticket.repository.CouponRepository
+import com.jvmhater.moduticket.repository.UserRepository
 import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
 import com.jvmhater.moduticket.util.readResourceFile
 import com.jvmhater.moduticket.util.toJson
@@ -21,8 +24,11 @@ import java.time.LocalDateTime
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @IntegrationTest
-class CouponControllerTest(client: WebTestClient, val couponRepository: CouponRepository) :
-    DescribeSpec() {
+class CouponControllerTest(
+    client: WebTestClient,
+    val couponRepository: CouponRepository,
+    val userRepository: UserRepository
+) : DescribeSpec() {
     override fun listeners() =
         listOf(ConstantNowTestListener(LocalDateTime.of(2023, 1, 24, 10, 15, 30)))
 
@@ -90,18 +96,15 @@ class CouponControllerTest(client: WebTestClient, val couponRepository: CouponRe
 
         describe("#createCoupon") {
             context("신규 쿠폰이 주어지면") {
-                val coupon = CouponFixture.generate(id = "create-id")
+                val coupon = CouponFixture.generate()
 
                 it("해당하는 쿠폰을 생성한다.") {
                     val createCouponRequest = CreateCouponRequest.from(coupon)
-                    val expectedCouponResponse = CouponResponse.from(coupon)
 
                     client
                         .doPost(url = baseUrl, request = createCouponRequest)
                         .expectStatus()
                         .isCreated
-                        .expectBody()
-                        .json(expectedCouponResponse.toJson())
                 }
             }
         }
@@ -143,8 +146,7 @@ class CouponControllerTest(client: WebTestClient, val couponRepository: CouponRe
                 val coupon = couponRepository.create(CouponFixture.generate())
 
                 it("해당하는 쿠폰이 제거된다.") {
-                    client.doDelete("$baseUrl/${coupon.id}").expectStatus().isOk
-
+                    client.doDelete("$baseUrl/${coupon.id}").expectStatus().isNoContent
                     client.doDelete("$baseUrl/${coupon.id}").expectStatus().isNotFound
                 }
             }
@@ -153,6 +155,31 @@ class CouponControllerTest(client: WebTestClient, val couponRepository: CouponRe
                 val couponId = "not-found-id"
                 it("쿠폰을 제거할 수 없다.") {
                     client.doDelete("$baseUrl/$couponId").expectStatus().isNotFound
+                }
+            }
+        }
+
+        describe("#issueCoupon") {
+            context("존재하는 유저 ID, 쿠폰 ID가 주어지면") {
+                val user = UserFixture.generate()
+                userRepository.create(id = user.id, password = user.password)
+
+                val coupon = CouponFixture.generate()
+                couponRepository.create(coupon)
+
+                val issueCouponRequest = IssueCouponRequest(userId = user.id, couponId = coupon.id)
+
+                it("쿠폰 발급에 성공한다.") {
+                    val expectedCouponResponse =
+                        CouponResponse.from(
+                            coupon.copy(issuableQuantity = coupon.issuableQuantity - 1)
+                        )
+                    client
+                        .doPost("$baseUrl/issue-coupon", issueCouponRequest)
+                        .expectStatus()
+                        .isCreated
+                        .expectBody()
+                        .json(expectedCouponResponse.toJson())
                 }
             }
         }

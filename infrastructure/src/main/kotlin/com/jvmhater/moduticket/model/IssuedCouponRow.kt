@@ -7,10 +7,14 @@ import org.springframework.data.annotation.Transient
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
-@Table("IssuedCoupon")
+@Table("issued_coupon")
 class IssuedCouponRow(
-    @Id @Column("id") override val rowId: String = generateId("issued-coupon-"),
+    @Id @Column("id") override val rowId: String = generateId(ID_PREFIX),
     @Transient @Value("null") override val isNewRow: Boolean = false,
     val userId: String,
     val couponId: String
-) : Row<String>
+) : Row<String> {
+    companion object {
+        const val ID_PREFIX = "issued-coupon-"
+    }
+}

@@ -1,6 +1,7 @@
 package com.jvmhater.moduticket.controller
 
 import com.jvmhater.moduticket.dto.request.CreateCouponRequest
+import com.jvmhater.moduticket.dto.request.IssueCouponRequest
 import com.jvmhater.moduticket.dto.request.UpdateCouponRequest
 import com.jvmhater.moduticket.dto.response.CouponResponse
 import com.jvmhater.moduticket.service.CouponService
@@ -61,11 +62,12 @@ class CouponController(val couponService: CouponService) {
     }
 
     @Operation(description = "할인 쿠폰을 특정 유저에게 발급한다.")
-    @PostMapping("/{coupon_id}")
+    @PostMapping("/issue-coupon")
     suspend fun issueCoupon(
-        @PathVariable("coupon_id") couponId: String
+        @RequestBody issueCouponRequest: IssueCouponRequest
     ): ResponseEntity<CouponResponse> = createHandle {
-        val userId = "userId" // TODO: JWT 토큰 페이로드에서 user_id 가져오는 로직 필요.
-        CouponResponse.from(couponService.issueCoupon(userId, couponId))
+        CouponResponse.from(
+            couponService.issueCoupon(issueCouponRequest.userId, issueCouponRequest.couponId)
+        )
     }
 }
