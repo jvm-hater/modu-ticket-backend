@@ -17,5 +17,6 @@ suspend inline fun <reified T> createHandle(crossinline block: suspend () -> T):
 }
 
 suspend inline fun deleteHandle(crossinline block: suspend () -> Unit): ResponseEntity<Unit> {
+    block()
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
 }

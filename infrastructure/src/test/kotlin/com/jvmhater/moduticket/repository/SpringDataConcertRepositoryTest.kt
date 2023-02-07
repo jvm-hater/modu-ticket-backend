@@ -14,9 +14,9 @@ import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 
 @TestContainerTest
 class SpringDataConcertRepositoryTest(
-    private val r2dbcConcertRepository: R2dbcConcertRepository,
-    private val r2dbcSeatRepository: R2dbcSeatRepository,
-    private val template: R2dbcEntityTemplate
+    r2dbcConcertRepository: R2dbcConcertRepository,
+    r2dbcSeatRepository: R2dbcSeatRepository,
+    template: R2dbcEntityTemplate
 ) : CustomDescribeSpec() {
 
     private val concertRepository =

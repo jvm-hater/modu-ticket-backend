@@ -1,5 +1,6 @@
 package com.jvmhater.moduticket.controller
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.jvmhater.moduticket.dto.request.CreateConcertRequest
 import com.jvmhater.moduticket.dto.request.ViewConcertsRequest
 import com.jvmhater.moduticket.dto.response.ConcertResponse
@@ -22,10 +23,13 @@ class ConcertController(private val concertService: ConcertService) {
     @Operation(description = "콘서트 목록을 조회한다.")
     @GetMapping
     suspend fun viewConcerts(
-        @ModelAttribute request: ViewConcertsRequest
+        @RequestParam params: Map<String, String>
     ): ResponseEntity<ConcertsResponse> = handle {
-        val query = ConcertSearchQuery(request.category, request.searchText)
-        val page = Page(request.pagination.page, request.pagination.size)
+        // TODO : query params refactoring
+        val request = ObjectMapper().convertValue(params, ViewConcertsRequest::class.java)
+
+        val query = ConcertSearchQuery(request.category, request.searchText).apply {}
+        val page = Page(request.page, request.size)
 
         concertService.findConcerts(query, page).toResponse()
     }
