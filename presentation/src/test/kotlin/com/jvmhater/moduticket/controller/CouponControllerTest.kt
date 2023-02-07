@@ -9,6 +9,7 @@ import com.jvmhater.moduticket.dto.request.CreateCouponRequest
 import com.jvmhater.moduticket.dto.request.IssueCouponRequest
 import com.jvmhater.moduticket.dto.request.UpdateCouponRequest
 import com.jvmhater.moduticket.dto.response.CouponResponse
+import com.jvmhater.moduticket.dto.response.toResponse
 import com.jvmhater.moduticket.model.CouponFixture
 import com.jvmhater.moduticket.model.UserFixture
 import com.jvmhater.moduticket.repository.CouponRepository
@@ -45,7 +46,7 @@ class CouponControllerTest(
                 val coupon = couponRepository.create(CouponFixture.generate(name = couponName))
 
                 it("해당 쿠폰 리스트를 조회한다.") {
-                    val expectedResponse = listOf(CouponResponse.from(coupon))
+                    val expectedResponse = listOf(coupon.toResponse())
 
                     client
                         .doGet(baseUrl, mapOf(Pair("coupon_name", couponName)))
@@ -77,7 +78,7 @@ class CouponControllerTest(
                 val coupon = couponRepository.create(CouponFixture.generate())
 
                 it("해당하는 쿠폰을 조회한다.") {
-                    val expectedResponse = CouponResponse.from(coupon)
+                    val expectedResponse = coupon.toResponse()
 
                     client
                         .doGet("$baseUrl/${coupon.id}")
@@ -116,7 +117,7 @@ class CouponControllerTest(
 
                 it("해당하는 쿠폰이 변경된다.") {
                     val updateCouponRequest = UpdateCouponRequest.from(couponToUpdate)
-                    val expectedCouponResponse = CouponResponse.from(couponToUpdate)
+                    val expectedCouponResponse = couponToUpdate.toResponse()
 
                     client
                         .doPut(url = "$baseUrl/${couponToUpdate.id}", request = updateCouponRequest)
@@ -170,10 +171,7 @@ class CouponControllerTest(
                 val issueCouponRequest = IssueCouponRequest(userId = user.id, couponId = coupon.id)
 
                 it("쿠폰 발급에 성공한다.") {
-                    val expectedCouponResponse =
-                        CouponResponse.from(
-                            coupon.copy(issuableQuantity = coupon.issuableQuantity - 1)
-                        )
+                    val expectedCouponResponse = coupon.copy(issuableQuantity = coupon.issuableQuantity - 1).toResponse()
                     client
                         .doPost("$baseUrl/issue-coupon", issueCouponRequest)
                         .expectStatus()

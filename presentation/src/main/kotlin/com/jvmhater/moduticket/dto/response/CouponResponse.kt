@@ -13,22 +13,18 @@ data class CouponResponse(
     val useStartDate: LocalDateTime,
     val useEndDate: LocalDateTime,
     val issuableQuantity: Int,
-) {
+)
 
-    companion object {
-        fun from(coupon: Coupon): CouponResponse {
-            return coupon.run {
-                CouponResponse(
-                    id = id,
-                    name = name,
-                    discountRate = discountRate,
-                    concertCategory = concertCategory,
-                    maxDiscountAmount = maxDiscountAmount,
-                    useStartDate = useStartDate,
-                    useEndDate = useEndDate,
-                    issuableQuantity = issuableQuantity
-                )
-            }
-        }
-    }
-}
+fun Coupon.toResponse(): CouponResponse =
+    CouponResponse(
+        id = id,
+        name = name,
+        discountRate = discountRate,
+        concertCategory = concertCategory,
+        maxDiscountAmount = maxDiscountAmount,
+        useStartDate = useStartDate,
+        useEndDate = useEndDate,
+        issuableQuantity = issuableQuantity
+    )
+
+fun List<Coupon>.toResponses(): List<CouponResponse> = this.map { it.toResponse() }

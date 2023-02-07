@@ -4,6 +4,8 @@ import com.jvmhater.moduticket.dto.request.CreateCouponRequest
 import com.jvmhater.moduticket.dto.request.IssueCouponRequest
 import com.jvmhater.moduticket.dto.request.UpdateCouponRequest
 import com.jvmhater.moduticket.dto.response.CouponResponse
+import com.jvmhater.moduticket.dto.response.toResponse
+import com.jvmhater.moduticket.dto.response.toResponses
 import com.jvmhater.moduticket.service.CouponService
 import com.jvmhater.moduticket.util.createHandle
 import com.jvmhater.moduticket.util.deleteHandle
@@ -27,23 +29,23 @@ class CouponController(val couponService: CouponService) {
     @Operation(description = "특정 쿠폰 이름에 맞는 할인 쿠폰 목록을 조회한다.")
     @GetMapping
     suspend fun viewCoupons(
-        @RequestParam("coupon_name") couponName: String
+        @RequestParam("coupon_name") couponName: String,
     ): ResponseEntity<List<CouponResponse>> = handle {
-        couponService.findCoupons(couponName).map { CouponResponse.from(it) }
+        couponService.findCoupons(couponName).toResponses()
     }
 
     @Operation(description = "특정 할인 쿠폰을 조회한다.")
     @GetMapping("/{coupon_id}")
     suspend fun viewCoupon(
-        @PathVariable("coupon_id") couponId: String
-    ): ResponseEntity<CouponResponse> = handle { CouponResponse.from(couponService.find(couponId)) }
+        @PathVariable("coupon_id") couponId: String,
+    ): ResponseEntity<CouponResponse> = handle { couponService.find(couponId).toResponse() }
 
     @Operation(description = "특정 할인 쿠폰을 생성한다.")
     @PostMapping
     suspend fun createCoupon(
         @RequestBody createCouponRequest: CreateCouponRequest,
     ): ResponseEntity<CouponResponse> = createHandle {
-        CouponResponse.from(couponService.create(createCouponRequest.toDomain()))
+        couponService.create(createCouponRequest.toDomain()).toResponse()
     }
 
     @Operation(description = "특정 할인 쿠폰을 수정한다.")
@@ -52,7 +54,7 @@ class CouponController(val couponService: CouponService) {
         @PathVariable("coupon_id") couponId: String,
         @RequestBody updateCouponRequest: UpdateCouponRequest,
     ): ResponseEntity<CouponResponse> = handle {
-        CouponResponse.from(couponService.update(updateCouponRequest.toDomain(couponId)))
+        couponService.update(updateCouponRequest.toDomain(couponId)).toResponse()
     }
 
     @Operation(description = "특정 할인 쿠폰을 삭제한다.")
@@ -64,10 +66,8 @@ class CouponController(val couponService: CouponService) {
     @Operation(description = "할인 쿠폰을 특정 유저에게 발급한다.")
     @PostMapping("/issue-coupon")
     suspend fun issueCoupon(
-        @RequestBody issueCouponRequest: IssueCouponRequest
+        @RequestBody issueCouponRequest: IssueCouponRequest,
     ): ResponseEntity<CouponResponse> = createHandle {
-        CouponResponse.from(
-            couponService.issueCoupon(issueCouponRequest.userId, issueCouponRequest.couponId)
-        )
+        couponService.issueCoupon(issueCouponRequest.userId, issueCouponRequest.couponId).toResponse()
     }
 }
