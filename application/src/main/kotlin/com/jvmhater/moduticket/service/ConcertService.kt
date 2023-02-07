@@ -17,7 +17,7 @@ class ConcertService(private val concertRepository: ConcertRepository) {
 
     // @Transactional(readOnly = true)
     suspend fun find(id: String): Concert {
-        return concertRepository.find(id)
+        return concertRepository.findWithSeats(id)
     }
 
     suspend fun create(concert: Concert): Concert {

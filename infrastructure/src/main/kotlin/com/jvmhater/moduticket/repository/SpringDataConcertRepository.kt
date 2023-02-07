@@ -41,7 +41,7 @@ class SpringDataConcertRepository(
                 .toDomains()
         }
 
-    override suspend fun find(id: String): Concert = dbExceptionHandle {
+    override suspend fun findWithSeats(id: String): Concert = dbExceptionHandle {
         val concert =
             r2dbcConcertRepository
                 .findById(id)

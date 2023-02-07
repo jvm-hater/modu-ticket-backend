@@ -51,7 +51,7 @@ class SpringDataConcertRepositoryTest(
 
             context("특정 콘서트 ID를 가진 Concert Row가 있다면") {
                 it("해당 콘서트 조회에 성공한다.") {
-                    val foundConcert = concertRepository.find(concert.id)
+                    val foundConcert = concertRepository.findWithSeats(concert.id)
 
                     foundConcert.id shouldBe concert.id
                     foundConcert.seats.size shouldBe seats.size
@@ -65,7 +65,7 @@ class SpringDataConcertRepositoryTest(
             context("특정 콘서트 ID를 가진 Concert Row가 없다면") {
                 it("콘서트 조회에 실패한다.") {
                     shouldThrow<RepositoryException.RecordNotFound> {
-                        concertRepository.find("not-found-id")
+                        concertRepository.findWithSeats("not-found-id")
                     }
                 }
             }
