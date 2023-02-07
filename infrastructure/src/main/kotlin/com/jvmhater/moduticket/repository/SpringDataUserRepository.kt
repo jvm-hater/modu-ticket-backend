@@ -3,6 +3,7 @@ package com.jvmhater.moduticket.repository
 import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.model.User
 import com.jvmhater.moduticket.model.UserRow
+import com.jvmhater.moduticket.model.toDomains
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.springframework.dao.DataAccessException
@@ -42,10 +43,10 @@ class SpringDataUserRepository(
             val coupons =
                 r2dbcCouponRepository
                     .findCouponInnerJoinIssuedCouponByUserId(id)
-                    .map { it.toDomain() }
                     .toList()
+                    .toDomains()
 
-            return user.copy(coupons = coupons)
+            return user.updateCoupons(coupons)
         } catch (e: DataAccessException) {
             throw RepositoryException.UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
         }

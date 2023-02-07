@@ -4,6 +4,7 @@ import com.jvmhater.moduticket.exception.DomainException
 import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.model.CouponFixture
 import com.jvmhater.moduticket.model.UserFixture
+import com.jvmhater.moduticket.model.vo.Quantity
 import com.jvmhater.moduticket.repository.CouponRepository
 import com.jvmhater.moduticket.repository.UserRepository
 import io.kotest.assertions.throwables.shouldThrow
@@ -173,7 +174,8 @@ class CouponServiceTest : DescribeSpec() {
 
                 context("유저가 발급할 쿠폰을 보유하고 있지 않으면") {
                     val user = UserFixture.generate()
-                    val issuedCoupon = coupon.copy(issuableQuantity = coupon.issuableQuantity - 1)
+                    val issuedCoupon =
+                        coupon.copy(issuableQuantity = coupon.issuableQuantity - Quantity(1))
                     it("쿠폰을 발급한다.") {
                         coEvery { userRepository.findWithIssuedCoupon(user.id) } returns user
                         coEvery {

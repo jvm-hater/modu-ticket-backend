@@ -2,6 +2,7 @@ package com.jvmhater.moduticket.dto.response
 
 import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.model.vo.ConcertCategory
+import com.jvmhater.moduticket.model.vo.toQuantity
 import java.time.LocalDateTime
 
 data class CouponResponse(
@@ -23,7 +24,7 @@ data class CouponResponse(
             maxDiscountAmount = maxDiscountAmount,
             useStartDate = useStartDate,
             useEndDate = useEndDate,
-            issuableQuantity = issuableQuantity
+            issuableQuantity = issuableQuantity.toQuantity()
         )
     }
 }
@@ -37,7 +38,7 @@ fun Coupon.toResponse(): CouponResponse =
         maxDiscountAmount = maxDiscountAmount,
         useStartDate = useStartDate,
         useEndDate = useEndDate,
-        issuableQuantity = issuableQuantity
+        issuableQuantity = issuableQuantity.value
     )
 
 fun List<Coupon>.toResponses(): List<CouponResponse> = this.map { it.toResponse() }

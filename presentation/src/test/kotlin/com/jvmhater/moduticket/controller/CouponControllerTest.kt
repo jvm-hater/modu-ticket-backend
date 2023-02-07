@@ -12,6 +12,7 @@ import com.jvmhater.moduticket.dto.response.CouponResponse
 import com.jvmhater.moduticket.dto.response.toResponse
 import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.model.CouponFixture
+import com.jvmhater.moduticket.model.vo.Quantity
 import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
 import com.jvmhater.moduticket.util.readResourceFile
 import com.jvmhater.moduticket.util.toJson
@@ -168,7 +169,9 @@ class CouponControllerTest(client: WebTestClient) : DescribeSpec() {
 
                 it("쿠폰 발급에 성공한다.") {
                     val expectedCouponResponse =
-                        coupon.copy(issuableQuantity = coupon.issuableQuantity - 1).toResponse()
+                        coupon
+                            .copy(issuableQuantity = coupon.issuableQuantity - Quantity(1))
+                            .toResponse()
                     client
                         .doPost("$BASE_URL/issue-coupon", issueCouponRequest)
                         .expectStatus()

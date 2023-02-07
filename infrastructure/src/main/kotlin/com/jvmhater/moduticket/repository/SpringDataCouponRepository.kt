@@ -71,7 +71,7 @@ class SpringDataCouponRepository(
     }
 
     override suspend fun issue(userId: String, coupon: Coupon): Coupon {
-        val issuedCoupon = update(coupon.copy(issuableQuantity = coupon.issuableQuantity - 1))
+        val issuedCoupon = update(coupon.issue())
         r2dbcIssuedCouponRepository.save(
             IssuedCouponRow(isNewRow = true, userId = userId, couponId = issuedCoupon.id)
         )
@@ -86,7 +86,7 @@ interface R2dbcCouponRepository : CoroutineCrudRepository<CouponRow, String> {
     @Query(
         """
            SELECT coupon.* FROM coupon 
-           INNER JOIN issued_coupon 
+           JOIN issued_coupon 
            ON coupon.id = issued_coupon.coupon_id 
            WHERE issued_coupon.user_id = :userId 
         """

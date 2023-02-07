@@ -1,6 +1,7 @@
 package com.jvmhater.moduticket.model
 
 import com.jvmhater.moduticket.model.vo.ConcertCategory
+import com.jvmhater.moduticket.model.vo.toQuantity
 import com.jvmhater.moduticket.util.generateId
 import java.time.LocalDateTime
 
@@ -23,7 +24,7 @@ object CouponFixture {
             maxDiscountAmount = maxDiscountAmount,
             useStartDate = useStartDate,
             useEndDate = useEndDate,
-            issuableQuantity = issuableQuantity
+            issuableQuantity = issuableQuantity.toQuantity()
         )
     }
 }

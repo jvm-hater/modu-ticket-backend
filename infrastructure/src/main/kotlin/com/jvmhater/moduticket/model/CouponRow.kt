@@ -1,6 +1,7 @@
 package com.jvmhater.moduticket.model
 
 import com.jvmhater.moduticket.model.vo.ConcertCategory
+import com.jvmhater.moduticket.model.vo.toQuantity
 import java.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.annotation.Id
@@ -30,7 +31,7 @@ class CouponRow(
             maxDiscountAmount = maxDiscountAmount,
             useStartDate = useStartDate,
             useEndDate = useEndDate,
-            issuableQuantity = issuableQuantity
+            issuableQuantity = issuableQuantity.toQuantity()
         )
 }
 
@@ -44,6 +45,8 @@ fun Coupon.toRow(isNewRow: Boolean = false): CouponRow {
         maxDiscountAmount = maxDiscountAmount,
         useStartDate = useStartDate,
         useEndDate = useEndDate,
-        issuableQuantity = issuableQuantity
+        issuableQuantity = issuableQuantity.value
     )
 }
+
+fun List<CouponRow>.toDomains(): List<Coupon> = this.map { it.toDomain() }

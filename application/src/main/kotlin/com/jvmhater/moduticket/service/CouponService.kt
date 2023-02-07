@@ -1,6 +1,5 @@
 package com.jvmhater.moduticket.service
 
-import com.jvmhater.moduticket.exception.DomainException
 import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.repository.CouponRepository
 import com.jvmhater.moduticket.repository.UserRepository
@@ -36,13 +35,10 @@ class CouponService(val couponRepository: CouponRepository, val userRepository: 
     // TODO: 추후 동시성 검증을 거쳐야 합니다.
     suspend fun issueCoupon(userId: String, couponId: String): Coupon {
         val coupon = couponRepository.find(couponId)
-        coupon.validateIssueCoupon()
+        coupon.validateCouponUseDate()
 
         val user = userRepository.findWithIssuedCoupon(userId)
-
-        if (user.coupons.contains(coupon)) {
-            throw DomainException.InvalidArgumentException("이미 해당 쿠폰을 발급했습니다.")
-        }
+        user.validateAlreadyIssueCoupon(coupon)
 
         return couponRepository.issue(userId, coupon)
     }

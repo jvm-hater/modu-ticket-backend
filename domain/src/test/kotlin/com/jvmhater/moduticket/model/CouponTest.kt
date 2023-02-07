@@ -1,10 +1,12 @@
 package com.jvmhater.moduticket.model
 
 import com.jvmhater.moduticket.exception.DomainException
+import com.jvmhater.moduticket.model.vo.Quantity
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.time.ConstantNowTestListener
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import java.time.LocalDateTime
 
@@ -15,31 +17,7 @@ class CouponTest : DescribeSpec() {
     override fun listeners() = listOf(ConstantNowTestListener(fixedLocalDateTime))
 
     init {
-        describe("#validateIssueCoupon") {
-            context("발급 수량이 양수면") {
-                val coupon = CouponFixture.generate(issuableQuantity = 1)
-                it("예외가 발생하지 않는다.") {
-                    shouldNotThrow<DomainException.InvalidArgumentException> {
-                        coupon.validateIssueCoupon()
-                    }
-                }
-            }
-
-            context("발급 수량이 0보다 작거나 같으면") {
-                val coupons =
-                    listOf(
-                        CouponFixture.generate(issuableQuantity = 0),
-                        CouponFixture.generate(issuableQuantity = -1)
-                    )
-                it("예외를 던진다.") {
-                    coupons.forEach {
-                        shouldThrow<DomainException.InvalidArgumentException> {
-                            it.validateIssueCoupon()
-                        }
-                    }
-                }
-            }
-
+        describe("#validateCouponUseDate") {
             context("발급 시작 기한이 현재보다 늦거나, 발급 마감 기한이 현재보다 빠르면") {
                 it("예외를 던진다.") {
                     coEvery { LocalDateTime.now() } returns fixedLocalDateTime
@@ -51,7 +29,7 @@ class CouponTest : DescribeSpec() {
                         )
                     coupons.forEach {
                         shouldThrow<DomainException.InvalidArgumentException> {
-                            it.validateIssueCoupon()
+                            it.validateCouponUseDate()
                         }
                     }
                 }
@@ -67,7 +45,29 @@ class CouponTest : DescribeSpec() {
                             useEndDate = fixedLocalDateTime.plusDays(1L)
                         )
                     shouldNotThrow<DomainException.InvalidArgumentException> {
-                        coupon.validateIssueCoupon()
+                        coupon.validateCouponUseDate()
+                    }
+                }
+            }
+        }
+
+        describe("issue") {
+            context("발급 수량이 양수면") {
+                val coupon = CouponFixture.generate(issuableQuantity = 1)
+                it("발급 수량을 1개 줄인다.") {
+                    coupon.issue() shouldBe coupon.copy(issuableQuantity = Quantity(0))
+                }
+            }
+
+            context("발급 수량이 0보다 작거나 같으면") {
+                val coupons =
+                    listOf(
+                        CouponFixture.generate(issuableQuantity = 0),
+                        CouponFixture.generate(issuableQuantity = -1)
+                    )
+                it("예외를 던진다.") {
+                    coupons.forEach {
+                        shouldThrow<DomainException.InvalidArgumentException> { it.issue() }
                     }
                 }
             }

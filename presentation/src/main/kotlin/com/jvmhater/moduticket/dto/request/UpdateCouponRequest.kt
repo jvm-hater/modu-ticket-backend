@@ -2,6 +2,7 @@ package com.jvmhater.moduticket.dto.request
 
 import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.model.vo.ConcertCategory
+import com.jvmhater.moduticket.model.vo.toQuantity
 import java.time.LocalDateTime
 
 data class UpdateCouponRequest(
@@ -23,7 +24,7 @@ data class UpdateCouponRequest(
             maxDiscountAmount = maxDiscountAmount,
             useStartDate = useStartDate,
             useEndDate = useEndDate,
-            issuableQuantity = issuableQuantity
+            issuableQuantity = issuableQuantity.toQuantity()
         )
     }
 
@@ -37,7 +38,7 @@ data class UpdateCouponRequest(
                     maxDiscountAmount = maxDiscountAmount,
                     useStartDate = useStartDate,
                     useEndDate = useEndDate,
-                    issuableQuantity = issuableQuantity
+                    issuableQuantity = issuableQuantity.value
                 )
             }
         }

@@ -6,4 +6,8 @@ value class Quantity(val value: Int) {
     operator fun plus(b: Quantity) = Quantity(value + b.value)
 
     operator fun minus(b: Quantity) = Quantity(value - b.value)
+
+    operator fun compareTo(b: Quantity): Int = value - b.value
 }
+
+fun Int.toQuantity(): Quantity = Quantity(value = this)
