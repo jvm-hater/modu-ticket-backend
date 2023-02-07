@@ -29,7 +29,11 @@ class SpringDataUserRepositoryTest(
     }
 
     private val userRepository =
-        SpringDataUserRepository(r2dbcUserRepository, r2dbcCouponRepository)
+        SpringDataUserRepository(
+            r2dbcUserRepository,
+            r2dbcCouponRepository,
+            r2dbcIssuedCouponRepository
+        )
     private val couponRepository =
         SpringDataCouponRepository(r2dbcCouponRepository, r2dbcIssuedCouponRepository)
 

@@ -13,7 +13,20 @@ data class CouponResponse(
     val useStartDate: LocalDateTime,
     val useEndDate: LocalDateTime,
     val issuableQuantity: Int,
-)
+) {
+    fun toDomain(): Coupon {
+        return Coupon(
+            id = id,
+            name = name,
+            discountRate = discountRate,
+            concertCategory = concertCategory,
+            maxDiscountAmount = maxDiscountAmount,
+            useStartDate = useStartDate,
+            useEndDate = useEndDate,
+            issuableQuantity = issuableQuantity
+        )
+    }
+}
 
 fun Coupon.toResponse(): CouponResponse =
     CouponResponse(

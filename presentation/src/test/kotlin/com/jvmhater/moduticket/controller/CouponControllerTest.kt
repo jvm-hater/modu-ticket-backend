@@ -10,10 +10,8 @@ import com.jvmhater.moduticket.dto.request.IssueCouponRequest
 import com.jvmhater.moduticket.dto.request.UpdateCouponRequest
 import com.jvmhater.moduticket.dto.response.CouponResponse
 import com.jvmhater.moduticket.dto.response.toResponse
+import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.model.CouponFixture
-import com.jvmhater.moduticket.model.UserFixture
-import com.jvmhater.moduticket.repository.CouponRepository
-import com.jvmhater.moduticket.repository.UserRepository
 import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
 import com.jvmhater.moduticket.util.readResourceFile
 import com.jvmhater.moduticket.util.toJson
@@ -25,11 +23,7 @@ import java.time.LocalDateTime
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @IntegrationTest
-class CouponControllerTest(
-    client: WebTestClient,
-    val couponRepository: CouponRepository,
-    val userRepository: UserRepository
-) : DescribeSpec() {
+class CouponControllerTest(client: WebTestClient) : DescribeSpec() {
     override fun listeners() =
         listOf(ConstantNowTestListener(LocalDateTime.of(2023, 1, 24, 10, 15, 30)))
 
@@ -37,19 +31,18 @@ class CouponControllerTest(
         readResourceFile("ddl/truncate.sql").forEach { TestMySQLContainer.sql(it) }
     }
 
-    private val baseUrl = "/api/coupons"
-
     init {
         describe("#viewCoupons") {
             context("존재하는 쿠폰 이름이 주어지면") {
                 val couponName = "winter-event"
-                val coupon = couponRepository.create(CouponFixture.generate(name = couponName))
+                val couponResponse =
+                    requestCreateCoupon(client, CouponFixture.generate(name = couponName))
 
                 it("해당 쿠폰 리스트를 조회한다.") {
-                    val expectedResponse = listOf(coupon.toResponse())
+                    val expectedResponse = listOf(couponResponse)
 
                     client
-                        .doGet(baseUrl, mapOf(Pair("coupon_name", couponName)))
+                        .doGet(BASE_URL, mapOf(Pair("coupon_name", couponName)))
                         .expectStatus()
                         .isOk
                         .expectBody()
@@ -64,7 +57,7 @@ class CouponControllerTest(
                     val expectedResponse = emptyList<CouponResponse>()
 
                     client
-                        .doGet(url = baseUrl, queryParams = mapOf(Pair("coupon_name", couponName)))
+                        .doGet(url = BASE_URL, queryParams = mapOf(Pair("coupon_name", couponName)))
                         .expectStatus()
                         .isOk
                         .expectBody()
@@ -75,23 +68,23 @@ class CouponControllerTest(
 
         describe("#viewCoupon") {
             context("존재하는 쿠폰 ID가 주어지면") {
-                val coupon = couponRepository.create(CouponFixture.generate())
+                val couponResponse = requestCreateCoupon(client)
 
                 it("해당하는 쿠폰을 조회한다.") {
-                    val expectedResponse = coupon.toResponse()
-
                     client
-                        .doGet("$baseUrl/${coupon.id}")
+                        .doGet("$BASE_URL/${couponResponse.id}")
                         .expectStatus()
                         .isOk
                         .expectBody()
-                        .json(expectedResponse.toJson())
+                        .json(couponResponse.toJson())
                 }
             }
 
             context("존재하지 않는 쿠폰 ID가 주어지면") {
                 val couponId = "not-found-id"
-                it("쿠폰을 조회할 수 없다.") { client.doGet("$baseUrl/$couponId").expectStatus().isNotFound }
+                it("쿠폰을 조회할 수 없다.") {
+                    client.doGet("$BASE_URL/$couponId").expectStatus().isNotFound
+                }
             }
         }
 
@@ -103,7 +96,7 @@ class CouponControllerTest(
                     val createCouponRequest = CreateCouponRequest.from(coupon)
 
                     client
-                        .doPost(url = baseUrl, request = createCouponRequest)
+                        .doPost(url = BASE_URL, request = createCouponRequest)
                         .expectStatus()
                         .isCreated
                 }
@@ -112,15 +105,18 @@ class CouponControllerTest(
 
         describe("#updateCoupon") {
             context("쿠폰 ID가 존재하는 변경할 쿠폰이 주어지면") {
-                val coupon = couponRepository.create(CouponFixture.generate())
-                val couponToUpdate = coupon.copy(name = "update-name")
+                val couponResponse = requestCreateCoupon(client)
+                val couponToUpdate = couponResponse.toDomain().copy(name = "update-name")
 
                 it("해당하는 쿠폰이 변경된다.") {
                     val updateCouponRequest = UpdateCouponRequest.from(couponToUpdate)
                     val expectedCouponResponse = couponToUpdate.toResponse()
 
                     client
-                        .doPut(url = "$baseUrl/${couponToUpdate.id}", request = updateCouponRequest)
+                        .doPut(
+                            url = "$BASE_URL/${couponToUpdate.id}",
+                            request = updateCouponRequest
+                        )
                         .expectStatus()
                         .isOk
                         .expectBody()
@@ -135,7 +131,10 @@ class CouponControllerTest(
                     val updateCouponRequest = UpdateCouponRequest.from(couponToUpdate)
 
                     client
-                        .doPut(url = "$baseUrl/${couponToUpdate.id}", request = updateCouponRequest)
+                        .doPut(
+                            url = "$BASE_URL/${couponToUpdate.id}",
+                            request = updateCouponRequest
+                        )
                         .expectStatus()
                         .isNotFound
                 }
@@ -144,43 +143,57 @@ class CouponControllerTest(
 
         describe("deleteCoupon") {
             context("존재하는 쿠폰 ID가 주어지면") {
-                val coupon = couponRepository.create(CouponFixture.generate())
+                val couponResponse = requestCreateCoupon(client)
 
                 it("해당하는 쿠폰이 제거된다.") {
-                    client.doDelete("$baseUrl/${coupon.id}").expectStatus().isNoContent
-                    client.doDelete("$baseUrl/${coupon.id}").expectStatus().isNotFound
+                    client.doDelete("$BASE_URL/${couponResponse.id}").expectStatus().isNoContent
+                    client.doDelete("$BASE_URL/${couponResponse.id}").expectStatus().isNotFound
                 }
             }
 
             context("존재하지 않는 쿠폰 ID가 주어지면") {
                 val couponId = "not-found-id"
                 it("쿠폰을 제거할 수 없다.") {
-                    client.doDelete("$baseUrl/$couponId").expectStatus().isNotFound
+                    client.doDelete("$BASE_URL/$couponId").expectStatus().isNotFound
                 }
             }
         }
 
         describe("#issueCoupon") {
             context("존재하는 유저 ID, 쿠폰 ID가 주어지면") {
-                val user = UserFixture.generate()
-                userRepository.create(id = user.id, password = user.password)
-
-                val coupon = CouponFixture.generate()
-                couponRepository.create(coupon)
-
-                val issueCouponRequest = IssueCouponRequest(userId = user.id, couponId = coupon.id)
+                val userResponse = UserControllerTest.requestSignup(client)
+                val coupon = requestCreateCoupon(client).toDomain()
+                val issueCouponRequest =
+                    IssueCouponRequest(userId = userResponse.id, couponId = coupon.id)
 
                 it("쿠폰 발급에 성공한다.") {
                     val expectedCouponResponse =
                         coupon.copy(issuableQuantity = coupon.issuableQuantity - 1).toResponse()
                     client
-                        .doPost("$baseUrl/issue-coupon", issueCouponRequest)
+                        .doPost("$BASE_URL/issue-coupon", issueCouponRequest)
                         .expectStatus()
                         .isCreated
                         .expectBody()
                         .json(expectedCouponResponse.toJson())
                 }
             }
+        }
+    }
+
+    companion object {
+        const val BASE_URL = "/api/coupons"
+
+        fun requestCreateCoupon(
+            client: WebTestClient,
+            coupon: Coupon = CouponFixture.generate(),
+        ): CouponResponse {
+            val createCouponRequest = CreateCouponRequest.from(coupon)
+
+            return client
+                .doPost(url = BASE_URL, request = createCouponRequest)
+                .expectBody(CouponResponse::class.java)
+                .returnResult()
+                .responseBody!!
         }
     }
 }

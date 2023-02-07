@@ -7,6 +7,8 @@ import com.jvmhater.moduticket.doPost
 import com.jvmhater.moduticket.dto.request.SignUpRequest
 import com.jvmhater.moduticket.dto.response.UserResponse
 import com.jvmhater.moduticket.model.Rank
+import com.jvmhater.moduticket.model.User
+import com.jvmhater.moduticket.model.UserFixture
 import com.jvmhater.moduticket.repository.UserRepository
 import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
 import com.jvmhater.moduticket.util.readResourceFile
@@ -61,7 +63,15 @@ class UserControllerTest(client: WebTestClient, val userRepository: UserReposito
                         .expectStatus()
                         .isOk
                         .expectBody()
-                        .json(UserResponse(id = "testId", point = 0, rank = Rank.BRONZE).toJson())
+                        .json(
+                            UserResponse(
+                                    id = "testId",
+                                    point = 0,
+                                    rank = Rank.BRONZE,
+                                    coupons = emptyList()
+                                )
+                                .toJson()
+                        )
                 }
             }
             context("존재하지 않는 유저라면") {
@@ -87,6 +97,26 @@ class UserControllerTest(client: WebTestClient, val userRepository: UserReposito
                         .isNotFound
                 }
             }
+        }
+    }
+
+    companion object {
+        const val BASE_URL = "/api/users"
+
+        fun requestSignup(
+            client: WebTestClient,
+            user: User = UserFixture.generate(),
+        ): UserResponse {
+            client.doPost(
+                "/api/signup",
+                request = SignUpRequest(id = user.id, password = user.password)
+            )
+
+            return client
+                .doGet("$BASE_URL/${user.id}")
+                .expectBody(UserResponse::class.java)
+                .returnResult()
+                .responseBody!!
         }
     }
 }
