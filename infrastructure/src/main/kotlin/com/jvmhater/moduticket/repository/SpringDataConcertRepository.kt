@@ -5,6 +5,7 @@ import com.jvmhater.moduticket.model.*
 import com.jvmhater.moduticket.model.query.ConcertSearchQuery
 import com.jvmhater.moduticket.model.query.Page
 import com.jvmhater.moduticket.util.dbExceptionHandle
+import com.jvmhater.moduticket.util.ifNullThrow
 import kotlinx.coroutines.flow.toList
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
@@ -41,12 +42,16 @@ class SpringDataConcertRepository(
         }
 
     override suspend fun find(id: String): Concert = dbExceptionHandle {
-        val concertRow =
-            r2dbcConcertRepository.findById(id)
-                ?: throw RepositoryException.RecordNotFound(message = "존재하지 않은 콘서트 ID 입니다.")
+        val concert =
+            r2dbcConcertRepository
+                .findById(id)
+                .ifNullThrow(
+                    ifNotNull = { it.toDomain() },
+                    exception = RepositoryException.RecordNotFound(message = "존재하지 않은 콘서트 ID 입니다.")
+                )
         val seats = r2dbcSeatRepository.findByConcertId(id).toList().toDomains()
 
-        concertRow.toDomain().updateSeats(seats)
+        concert.updateSeats(seats)
     }
 
     override suspend fun create(concert: Concert): Concert = dbExceptionHandle {
