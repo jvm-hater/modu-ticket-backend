@@ -171,7 +171,8 @@ class CouponControllerTest(
                 val issueCouponRequest = IssueCouponRequest(userId = user.id, couponId = coupon.id)
 
                 it("쿠폰 발급에 성공한다.") {
-                    val expectedCouponResponse = coupon.copy(issuableQuantity = coupon.issuableQuantity - 1).toResponse()
+                    val expectedCouponResponse =
+                        coupon.copy(issuableQuantity = coupon.issuableQuantity - 1).toResponse()
                     client
                         .doPost("$baseUrl/issue-coupon", issueCouponRequest)
                         .expectStatus()

@@ -43,18 +43,18 @@ class CouponController(val couponService: CouponService) {
     @Operation(description = "특정 할인 쿠폰을 생성한다.")
     @PostMapping
     suspend fun createCoupon(
-        @RequestBody createCouponRequest: CreateCouponRequest,
+        @RequestBody request: CreateCouponRequest,
     ): ResponseEntity<CouponResponse> = createHandle {
-        couponService.create(createCouponRequest.toDomain()).toResponse()
+        couponService.create(request.toDomain()).toResponse()
     }
 
     @Operation(description = "특정 할인 쿠폰을 수정한다.")
     @PutMapping("/{coupon_id}")
     suspend fun updateCoupon(
         @PathVariable("coupon_id") couponId: String,
-        @RequestBody updateCouponRequest: UpdateCouponRequest,
+        @RequestBody request: UpdateCouponRequest,
     ): ResponseEntity<CouponResponse> = handle {
-        couponService.update(updateCouponRequest.toDomain(couponId)).toResponse()
+        couponService.update(request.toDomain(couponId)).toResponse()
     }
 
     @Operation(description = "특정 할인 쿠폰을 삭제한다.")
@@ -66,8 +66,8 @@ class CouponController(val couponService: CouponService) {
     @Operation(description = "할인 쿠폰을 특정 유저에게 발급한다.")
     @PostMapping("/issue-coupon")
     suspend fun issueCoupon(
-        @RequestBody issueCouponRequest: IssueCouponRequest,
+        @RequestBody request: IssueCouponRequest,
     ): ResponseEntity<CouponResponse> = createHandle {
-        couponService.issueCoupon(issueCouponRequest.userId, issueCouponRequest.couponId).toResponse()
+        couponService.issueCoupon(request.userId, request.couponId).toResponse()
     }
 }

@@ -59,5 +59,4 @@ class SpringDataUserRepository(
     }
 }
 
-@Repository
-interface R2dbcUserRepository : CoroutineCrudRepository<UserRow, String>
+@Repository interface R2dbcUserRepository : CoroutineCrudRepository<UserRow, String>
