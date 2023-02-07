@@ -5,10 +5,12 @@ import com.jvmhater.moduticket.model.User
 import com.jvmhater.moduticket.model.UserRow
 import com.jvmhater.moduticket.model.toDomains
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
+import reactor.core.publisher.Mono
 
 @Repository
 class SpringDataUserRepository(
@@ -28,7 +30,7 @@ class SpringDataUserRepository(
     }
 
     override suspend fun find(id: String): User {
-        return r2dbcUserRepository.findById(id)?.toDomain()
+        return r2dbcUserRepository.findByUserId(id).map { it.toDomain() }.awaitSingle()
             ?: throw RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
     }
 
@@ -57,4 +59,7 @@ class SpringDataUserRepository(
     }
 }
 
-@Repository interface R2dbcUserRepository : CoroutineCrudRepository<UserRow, String>
+@Repository
+interface R2dbcUserRepository : CoroutineCrudRepository<UserRow, String> {
+    fun findByUserId(userId: String): Mono<UserRow>
+}
