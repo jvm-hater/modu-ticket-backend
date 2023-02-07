@@ -1,6 +1,7 @@
 dependencies {
     implementation(project(":application"))
     implementation(project(":domain"))
+    implementation(project(":infrastructure"))
     testImplementation(testFixtures(project(":domain")))
     testImplementation(testFixtures(project(":infrastructure")))
 

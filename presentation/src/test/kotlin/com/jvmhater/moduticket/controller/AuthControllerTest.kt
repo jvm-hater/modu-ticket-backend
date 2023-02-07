@@ -16,7 +16,7 @@ class AuthControllerTest(client: WebTestClient, val userRepository: UserReposito
     DescribeSpec() {
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {
-        TestMySQLContainer.sql(readResourceFile("ddl/truncate.sql"))
+        readResourceFile("ddl/truncate.sql").forEach { TestMySQLContainer.sql(it) }
     }
 
     private val baseUrl = "/api/login"

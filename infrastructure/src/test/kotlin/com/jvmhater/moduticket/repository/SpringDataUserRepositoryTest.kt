@@ -25,7 +25,7 @@ class SpringDataUserRepositoryTest(
         listOf(ConstantNowTestListener(LocalDateTime.of(2023, 1, 24, 10, 15, 30)))
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {
-        TestMySQLContainer.sql(readResourceFile("ddl/truncate.sql"))
+        readResourceFile("ddl/truncate.sql").forEach { TestMySQLContainer.sql(it) }
     }
 
     private val userRepository =

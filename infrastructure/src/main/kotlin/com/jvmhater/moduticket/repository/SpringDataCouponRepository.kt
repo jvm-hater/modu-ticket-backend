@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.springframework.dao.DataAccessException
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.TransientDataAccessResourceException
 import org.springframework.data.r2dbc.repository.Query
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
+import org.springframework.r2dbc.UncategorizedR2dbcException
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -43,10 +43,13 @@ class SpringDataCouponRepository(
     override suspend fun create(coupon: Coupon): Coupon {
         try {
             return r2dbcCouponRepository.save(coupon.toRow(isNewRow = true)).toDomain()
-        } catch (e: DataIntegrityViolationException) {
+        } catch (e: UncategorizedR2dbcException) {
             throw RepositoryException.RecordAlreadyExisted(e, "쿠폰 레코드가 이미 존재합니다.")
         } catch (e: DataAccessException) {
             throw RepositoryException.UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw Exception()
         }
     }
 

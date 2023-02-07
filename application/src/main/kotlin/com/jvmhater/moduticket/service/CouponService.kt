@@ -5,15 +5,18 @@ import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.repository.CouponRepository
 import com.jvmhater.moduticket.repository.UserRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-// @Transactional
+@Transactional
 class CouponService(val couponRepository: CouponRepository, val userRepository: UserRepository) {
 
+    @Transactional(readOnly = true)
     suspend fun findCoupons(name: String): List<Coupon> {
         return couponRepository.findCoupons(name)
     }
 
+    @Transactional(readOnly = true)
     suspend fun find(id: String): Coupon {
         return couponRepository.find(id)
     }

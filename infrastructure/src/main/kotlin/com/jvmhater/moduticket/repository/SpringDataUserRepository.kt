@@ -6,8 +6,8 @@ import com.jvmhater.moduticket.model.UserRow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.springframework.dao.DataAccessException
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
+import org.springframework.r2dbc.UncategorizedR2dbcException
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -19,7 +19,7 @@ class SpringDataUserRepository(
     override suspend fun create(id: String, password: String) {
         try {
             r2dbcUserRepository.save(UserRow(isNewRow = true, rowId = id, password = password))
-        } catch (e: DataIntegrityViolationException) {
+        } catch (e: UncategorizedR2dbcException) {
             throw RepositoryException.RecordAlreadyExisted(e, "이미 존재하는 유저입니다.")
         } catch (e: DataAccessException) {
             throw RepositoryException.UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
