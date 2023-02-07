@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository
 class SpringDataUserRepository(
     private val r2dbcUserRepository: R2dbcUserRepository,
     private val r2dbcCouponRepository: R2dbcCouponRepository,
+    private val r2dbcIssuedCouponRepository: R2dbcIssuedCouponRepository
 ) : UserRepository {
 
     override suspend fun create(id: String, password: String) {
@@ -53,8 +54,10 @@ class SpringDataUserRepository(
     override suspend fun delete(id: String) {
         r2dbcUserRepository.findById(id)
             ?: throw RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
-        return r2dbcUserRepository.deleteById(id)
+        r2dbcUserRepository.deleteById(id)
+        r2dbcIssuedCouponRepository.deleteAllByUserId(id)
     }
 }
 
-@Repository interface R2dbcUserRepository : CoroutineCrudRepository<UserRow, String>
+@Repository
+interface R2dbcUserRepository : CoroutineCrudRepository<UserRow, String>

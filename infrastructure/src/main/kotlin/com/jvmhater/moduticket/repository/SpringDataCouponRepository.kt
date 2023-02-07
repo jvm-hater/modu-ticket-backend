@@ -67,6 +67,7 @@ class SpringDataCouponRepository(
         r2dbcCouponRepository.findById(id)
             ?: throw RepositoryException.RecordNotFound(message = "존재하지 않는 쿠폰 ID 입니다.")
         r2dbcCouponRepository.deleteById(id)
+        r2dbcIssuedCouponRepository.deleteAllByCouponId(id)
     }
 
     override suspend fun issue(userId: String, coupon: Coupon): Coupon {
@@ -94,4 +95,7 @@ interface R2dbcCouponRepository : CoroutineCrudRepository<CouponRow, String> {
 }
 
 @Repository
-interface R2dbcIssuedCouponRepository : CoroutineCrudRepository<IssuedCouponRow, String>
+interface R2dbcIssuedCouponRepository : CoroutineCrudRepository<IssuedCouponRow, String> {
+    fun deleteAllByCouponId(couponId: String)
+    fun deleteAllByUserId(userId: String)
+}
