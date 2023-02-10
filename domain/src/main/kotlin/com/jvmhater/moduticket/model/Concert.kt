@@ -11,9 +11,13 @@ data class Concert(
     val startDate: LocalDateTime,
     val time: Int,
     val category: ConcertCategory,
-    val seats: List<Seat>
+    val seats: MutableList<Seat> = mutableListOf()
 ) {
     companion object {
         const val ID_PREFIX = "concert-id-"
+    }
+
+    fun addSeats(seats: List<Seat>) {
+        this.seats.addAll(seats)
     }
 }

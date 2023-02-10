@@ -17,4 +17,27 @@ data class ConcertRow(
     val startDate: LocalDateTime,
     val time: Int,
     val category: ConcertCategory
-) : Row<String>
+) : Row<String> {
+    fun toDomain(): Concert =
+        Concert(
+            id = id,
+            name = name,
+            place = place,
+            startDate = startDate,
+            time = time,
+            category = category
+        )
+}
+
+fun List<ConcertRow>.toDomains(): List<Concert> = this.map { it.toDomain() }
+
+fun Concert.toRow(isNewRow: Boolean = false): ConcertRow =
+    ConcertRow(
+        rowId = id,
+        isNewRow = isNewRow,
+        name = name,
+        place = place,
+        startDate = startDate,
+        time = time,
+        category = category
+    )

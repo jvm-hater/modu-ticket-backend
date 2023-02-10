@@ -47,6 +47,8 @@ allprojects {
 
         /* test fixtures */
         testFixturesImplementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
+        testFixturesImplementation("io.kotest:kotest-runner-junit5:5.5.4")
+        testFixturesImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
     }
 
     dependencyManagement {
@@ -88,9 +90,7 @@ tasks {
         useJUnitPlatform()
         finalizedBy(jacocoTestReport)
     }
-    jacoco{
-        toolVersion = "0.8.8"
-    }
+    jacoco { toolVersion = "0.8.8" }
     jacocoTestReport {
         reports {
             dependsOn(test)

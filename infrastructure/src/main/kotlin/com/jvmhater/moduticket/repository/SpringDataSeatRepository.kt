@@ -1,6 +1,9 @@
 package com.jvmhater.moduticket.repository
 
 import com.jvmhater.moduticket.model.Seat
+import com.jvmhater.moduticket.model.SeatRow
+import kotlinx.coroutines.flow.Flow
+import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -14,4 +17,8 @@ class SpringDataSeatRepository : SeatRepository {
     }
 }
 
-@Repository interface R2dbcSeatRepository
+@Repository
+interface R2dbcSeatRepository : CoroutineCrudRepository<SeatRow, String> {
+    fun findByConcertId(concertId: String): Flow<SeatRow>
+    fun deleteByConcertId(concertId: String)
+}
