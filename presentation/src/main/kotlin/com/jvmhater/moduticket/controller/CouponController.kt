@@ -67,7 +67,7 @@ class CouponController(val couponService: CouponService) {
     @PostMapping("/issue-coupon")
     suspend fun issueCoupon(
         @RequestBody request: IssueCouponRequest,
-    ): ResponseEntity<CouponResponse> = createHandle {
+    ): ResponseEntity<Unit> = createHandle {
         couponService.issueCoupon(request.userId, request.couponId).toResponse()
     }
 }

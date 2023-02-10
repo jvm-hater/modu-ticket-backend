@@ -40,10 +40,7 @@ class SpringDataUserRepository(
         try {
             val user = find(id)
             val coupons =
-                r2dbcCouponRepository
-                    .findCouponJoinIssuedCouponByUserId(id)
-                    .toList()
-                    .toDomains()
+                r2dbcCouponRepository.findCouponJoinIssuedCouponByUserId(id).toList().toDomains()
 
             return user.updateCoupons(coupons)
         } catch (e: DataAccessException) {

@@ -176,6 +176,9 @@ class CouponControllerTest(client: WebTestClient) : DescribeSpec() {
                         .doPost("$BASE_URL/issue-coupon", issueCouponRequest)
                         .expectStatus()
                         .isCreated
+
+                    client
+                        .doGet("$BASE_URL/${coupon.id}")
                         .expectBody()
                         .json(expectedCouponResponse.toJson())
                 }
