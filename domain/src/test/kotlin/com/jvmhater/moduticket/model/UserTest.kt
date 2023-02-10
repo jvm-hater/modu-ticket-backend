@@ -23,7 +23,7 @@ class UserTest : DescribeSpec() {
 
             context("해당 쿠폰을 이미 발급했으면") {
                 val coupon = CouponFixture.generate()
-                val user = UserFixture.generate(coupons = listOf(coupon))
+                val user = UserFixture.generate(coupons = mutableListOf(coupon))
 
                 it("예외가 발생한다.") {
                     shouldThrow<DomainException.InvalidArgumentException> {
@@ -38,8 +38,8 @@ class UserTest : DescribeSpec() {
                 val coupon = CouponFixture.generate()
                 val user = UserFixture.generate()
 
-                user.updateCoupons(coupons = listOf(coupon)) shouldBe
-                    user.copy(coupons = listOf(coupon))
+                user.addCoupons(coupons = listOf(coupon))
+                user shouldBe user.copy(coupons = mutableListOf(coupon))
             }
         }
     }

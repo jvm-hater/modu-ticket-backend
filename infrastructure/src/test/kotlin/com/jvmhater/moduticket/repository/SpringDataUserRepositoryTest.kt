@@ -87,7 +87,7 @@ class SpringDataUserRepositoryTest(
                 )
 
                 it("발급된 쿠폰을 포함한 유저를 조회한다.") {
-                    val expectedUser = user.copy(coupons = listOf(coupon))
+                    val expectedUser = user.copy(coupons = mutableListOf(coupon))
 
                     expectedUser shouldBe userRepository.findWithIssuedCoupon(user.id)
                 }

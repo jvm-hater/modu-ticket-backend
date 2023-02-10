@@ -162,7 +162,7 @@ class CouponServiceTest : DescribeSpec() {
                 }
 
                 context("유저가 이미 발급할 쿠폰을 보유하고 있으면") {
-                    val user = UserFixture.generate(coupons = listOf(coupon))
+                    val user = UserFixture.generate(coupons = mutableListOf(coupon))
                     it("쿠폰을 발급할 수 없다.") {
                         coEvery { userRepository.findWithIssuedCoupon(user.id) } returns user
 

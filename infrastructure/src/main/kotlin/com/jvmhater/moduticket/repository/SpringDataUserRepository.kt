@@ -42,7 +42,8 @@ class SpringDataUserRepository(
             val coupons =
                 r2dbcCouponRepository.findCouponJoinIssuedCouponByUserId(id).toList().toDomains()
 
-            return user.updateCoupons(coupons)
+            user.addCoupons(coupons)
+            return user
         } catch (e: DataAccessException) {
             throw RepositoryException.UnknownAccessFailure(e, "데이터베이스 연결에 실패하였습니다.")
         }

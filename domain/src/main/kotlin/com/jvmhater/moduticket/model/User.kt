@@ -8,7 +8,7 @@ data class User(
     val point: Int,
     val rank: Rank,
     // val reservationList: List<Reservation>?, TODO() 추후 추가 필요
-    val coupons: List<Coupon> = emptyList()
+    val coupons: MutableList<Coupon> = mutableListOf()
 ) {
     fun validateAlreadyIssueCoupon(coupon: Coupon) {
         if (coupons.contains(coupon)) {
@@ -16,7 +16,7 @@ data class User(
         }
     }
 
-    fun updateCoupons(coupons: List<Coupon>): User {
-        return this.copy(coupons = coupons)
+    fun addCoupons(coupons: List<Coupon>) {
+        this.coupons.addAll(coupons)
     }
 }
