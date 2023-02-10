@@ -4,7 +4,6 @@ import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.model.User
 import com.jvmhater.moduticket.model.UserRow
 import com.jvmhater.moduticket.model.toDomains
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.springframework.dao.DataAccessException
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
@@ -42,7 +41,7 @@ class SpringDataUserRepository(
             val user = find(id)
             val coupons =
                 r2dbcCouponRepository
-                    .findCouponInnerJoinIssuedCouponByUserId(id)
+                    .findCouponJoinIssuedCouponByUserId(id)
                     .toList()
                     .toDomains()
 

@@ -32,6 +32,6 @@ data class Coupon(
         if (issuableQuantity < MIN_ISSUABLE_QUANTITY) {
             throw DomainException.InvalidArgumentException("해당 쿠폰 발급은 마감되었습니다.")
         }
-        return this.copy(issuableQuantity = issuableQuantity.minus(Quantity(1)))
+        return this.copy(issuableQuantity = issuableQuantity - 1)
     }
 }

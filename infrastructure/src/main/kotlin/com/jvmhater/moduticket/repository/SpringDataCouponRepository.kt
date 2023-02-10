@@ -91,7 +91,7 @@ interface R2dbcCouponRepository : CoroutineCrudRepository<CouponRow, String> {
            WHERE issued_coupon.user_id = :userId 
         """
     )
-    fun findCouponInnerJoinIssuedCouponByUserId(userId: String): Flow<CouponRow>
+    fun findCouponJoinIssuedCouponByUserId(userId: String): Flow<CouponRow>
 }
 
 @Repository
