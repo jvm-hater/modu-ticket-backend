@@ -41,7 +41,7 @@ class ConcertControllerTest(client: WebTestClient, concertRepository: ConcertRep
                             queryParams =
                                 mapOf(
                                     "category" to queryParams.category,
-                                    "search_text" to queryParams.searchText,
+                                    "searchText" to queryParams.searchText,
                                     "page" to queryParams.page,
                                     "size" to queryParams.size
                                 )

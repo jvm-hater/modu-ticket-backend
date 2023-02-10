@@ -1,11 +1,10 @@
 package com.jvmhater.moduticket.dto.request
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.jvmhater.moduticket.model.vo.ConcertCategory
 
 data class ViewConcertsRequest(
-    @JsonProperty("category") val category: ConcertCategory,
-    @JsonProperty("search_text") val searchText: String,
-    @JsonProperty("page") val page: Long,
-    @JsonProperty("size") val size: Int
+    val category: ConcertCategory,
+    val searchText: String,
+    val page: Long,
+    val size: Int
 )
