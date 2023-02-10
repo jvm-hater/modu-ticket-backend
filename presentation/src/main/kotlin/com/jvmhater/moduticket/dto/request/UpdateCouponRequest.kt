@@ -27,20 +27,4 @@ data class UpdateCouponRequest(
             issuableQuantity = issuableQuantity.toQuantity()
         )
     }
-
-    companion object {
-        fun from(coupon: Coupon): UpdateCouponRequest {
-            return coupon.run {
-                UpdateCouponRequest(
-                    name = name,
-                    discountRate = discountRate,
-                    concertCategory = concertCategory,
-                    maxDiscountAmount = maxDiscountAmount,
-                    useStartDate = useStartDate,
-                    useEndDate = useEndDate,
-                    issuableQuantity = issuableQuantity.value
-                )
-            }
-        }
-    }
 }

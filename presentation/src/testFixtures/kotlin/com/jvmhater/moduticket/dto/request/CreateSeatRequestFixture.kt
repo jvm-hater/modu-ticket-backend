@@ -1,6 +1,5 @@
-package com.jvmhater.moduticket.dto
+package com.jvmhater.moduticket.dto.request
 
-import com.jvmhater.moduticket.dto.request.CreateSeatRequest
 import com.jvmhater.moduticket.model.vo.SeatTier
 
 object CreateSeatRequestFixture {

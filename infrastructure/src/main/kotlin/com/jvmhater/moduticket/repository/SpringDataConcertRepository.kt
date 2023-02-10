@@ -7,13 +7,13 @@ import com.jvmhater.moduticket.model.query.Page
 import com.jvmhater.moduticket.util.ifNullThrow
 import com.jvmhater.moduticket.util.unknownDbExceptionHandle
 import kotlinx.coroutines.flow.toList
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.data.r2dbc.core.flow
 import org.springframework.data.r2dbc.core.select
 import org.springframework.data.relational.core.query.Criteria.where
 import org.springframework.data.relational.core.query.Query.query
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
+import org.springframework.r2dbc.UncategorizedR2dbcException
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -64,7 +64,7 @@ class SpringDataConcertRepository(
                         .toDomains()
                 addSeats(savedSeats)
             }
-        } catch (e: DataIntegrityViolationException) {
+        } catch (e: UncategorizedR2dbcException) {
             throw RepositoryException.RecordAlreadyExisted(e, "콘서트 레코드가 이미 존재합니다.")
         }
     }

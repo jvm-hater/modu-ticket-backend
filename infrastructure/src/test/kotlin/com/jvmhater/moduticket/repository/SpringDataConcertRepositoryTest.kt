@@ -45,7 +45,7 @@ class SpringDataConcertRepositoryTest(
         }
 
         describe("#find") {
-            val seats = listOf(SeatFixture.generate(), SeatFixture.generate())
+            val seats = mutableListOf(SeatFixture.generate(), SeatFixture.generate())
             val concert = ConcertFixture.generate(seats = seats)
             concertRepository.create(concert)
 
@@ -81,16 +81,18 @@ class SpringDataConcertRepositoryTest(
             }
 
             context("이미 존재하는 Concert 객체가 주어지면") {
+                val savedConcert = concertRepository.create(concert)
+
                 it("Concert Row 삽입에 실패한다.") {
                     shouldThrow<RepositoryException.RecordAlreadyExisted> {
-                        concertRepository.create(concert)
+                        concertRepository.create(savedConcert)
                     }
                 }
             }
         }
 
         describe("delete") {
-            val seats = listOf(SeatFixture.generate())
+            val seats = mutableListOf(SeatFixture.generate())
             val concert = ConcertFixture.generate(seats = seats)
             concertRepository.create(concert)
 

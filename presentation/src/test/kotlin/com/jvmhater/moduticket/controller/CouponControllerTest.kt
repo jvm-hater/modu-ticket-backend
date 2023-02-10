@@ -5,32 +5,20 @@ import com.jvmhater.moduticket.doDelete
 import com.jvmhater.moduticket.doGet
 import com.jvmhater.moduticket.doPost
 import com.jvmhater.moduticket.doPut
-import com.jvmhater.moduticket.dto.request.CreateCouponRequest
+import com.jvmhater.moduticket.dto.request.CreateCouponRequestFixture
 import com.jvmhater.moduticket.dto.request.IssueCouponRequest
-import com.jvmhater.moduticket.dto.request.UpdateCouponRequest
+import com.jvmhater.moduticket.dto.request.UpdateCouponRequestFixture
 import com.jvmhater.moduticket.dto.response.CouponResponse
 import com.jvmhater.moduticket.dto.response.toResponse
+import com.jvmhater.moduticket.kotest.CustomDescribeSpec
 import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.model.CouponFixture
 import com.jvmhater.moduticket.model.vo.Quantity
-import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
-import com.jvmhater.moduticket.util.readResourceFile
 import com.jvmhater.moduticket.util.toJson
-import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
-import io.kotest.extensions.time.ConstantNowTestListener
-import java.time.LocalDateTime
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @IntegrationTest
-class CouponControllerTest(client: WebTestClient) : DescribeSpec() {
-    override fun listeners() =
-        listOf(ConstantNowTestListener(LocalDateTime.of(2023, 1, 24, 10, 15, 30)))
-
-    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
-        readResourceFile("ddl/truncate.sql").forEach { TestMySQLContainer.sql(it) }
-    }
+class CouponControllerTest(client: WebTestClient) : CustomDescribeSpec() {
 
     init {
         describe("#viewCoupons") {
@@ -94,7 +82,7 @@ class CouponControllerTest(client: WebTestClient) : DescribeSpec() {
                 val coupon = CouponFixture.generate()
 
                 it("해당하는 쿠폰을 생성한다.") {
-                    val createCouponRequest = CreateCouponRequest.from(coupon)
+                    val createCouponRequest = CreateCouponRequestFixture.generate(coupon)
 
                     client
                         .doPost(url = BASE_URL, request = createCouponRequest)
@@ -110,7 +98,7 @@ class CouponControllerTest(client: WebTestClient) : DescribeSpec() {
                 val couponToUpdate = couponResponse.toDomain().copy(name = "update-name")
 
                 it("해당하는 쿠폰이 변경된다.") {
-                    val updateCouponRequest = UpdateCouponRequest.from(couponToUpdate)
+                    val updateCouponRequest = UpdateCouponRequestFixture.generate(couponToUpdate)
                     val expectedCouponResponse = couponToUpdate.toResponse()
 
                     client
@@ -129,7 +117,7 @@ class CouponControllerTest(client: WebTestClient) : DescribeSpec() {
                 val couponToUpdate = CouponFixture.generate()
 
                 it("쿠폰을 변경할 수 없다.") {
-                    val updateCouponRequest = UpdateCouponRequest.from(couponToUpdate)
+                    val updateCouponRequest = UpdateCouponRequestFixture.generate(couponToUpdate)
 
                     client
                         .doPut(
@@ -193,7 +181,7 @@ class CouponControllerTest(client: WebTestClient) : DescribeSpec() {
             client: WebTestClient,
             coupon: Coupon = CouponFixture.generate(),
         ): CouponResponse {
-            val createCouponRequest = CreateCouponRequest.from(coupon)
+            val createCouponRequest = CreateCouponRequestFixture.generate(coupon)
 
             return client
                 .doPost(url = BASE_URL, request = createCouponRequest)
