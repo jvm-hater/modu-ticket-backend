@@ -15,4 +15,6 @@ data class Seat(
     companion object {
         const val ID_PREFIX = "seat-id-"
     }
+
+    fun isSoldOut(): Boolean = quantityLeft.isZero()
 }

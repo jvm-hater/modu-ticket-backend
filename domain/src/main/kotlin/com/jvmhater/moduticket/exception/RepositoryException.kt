@@ -15,7 +15,7 @@ sealed class RepositoryException(
 
     data class UnknownAccessFailure(
         override val cause: Throwable? = null,
-        override val message: String,
+        override val message: String
     ) : RepositoryException(message, cause)
 
     data class DataIntegrityException(
