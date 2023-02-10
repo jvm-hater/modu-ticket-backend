@@ -15,7 +15,7 @@ sealed class RepositoryException(
 
     data class UnknownAccessFailure(
         override val cause: Throwable? = null,
-        override val message: String = "데이터베이스 연결에 실패하였습니다.",
+        override val message: String
     ) : RepositoryException(message, cause)
 
     data class DataIntegrityException(

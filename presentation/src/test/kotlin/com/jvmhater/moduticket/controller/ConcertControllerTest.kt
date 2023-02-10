@@ -55,7 +55,7 @@ class ConcertControllerTest(client: WebTestClient, concertRepository: ConcertRep
         }
 
         describe("#viewConcert") {
-            val seats = listOf(SeatFixture.generate(), SeatFixture.generate())
+            val seats = mutableListOf(SeatFixture.generate(), SeatFixture.generate())
             val concert = ConcertFixture.generate(seats = seats)
             concertRepository.create(concert)
 

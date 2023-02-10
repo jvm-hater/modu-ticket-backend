@@ -12,7 +12,7 @@ object ConcertFixture {
         startDate: LocalDateTime = LocalDateTime.now(),
         time: Int = 100,
         category: ConcertCategory = ConcertCategory.values().random(),
-        seats: List<Seat> = emptyList()
+        seats: MutableList<Seat> = mutableListOf()
     ): Concert =
         Concert(
             id = id,

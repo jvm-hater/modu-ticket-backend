@@ -20,4 +20,5 @@ data class CreateSeatRequest(
         )
 }
 
-fun List<CreateSeatRequest>.toDomains(): List<Seat> = this.map { it.toDomain() }
+fun List<CreateSeatRequest>.toDomains(): MutableList<Seat> =
+    this.map { it.toDomain() }.toMutableList()
