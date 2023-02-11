@@ -13,4 +13,6 @@ interface CouponRepository {
     suspend fun update(coupon: Coupon): Coupon
 
     suspend fun delete(id: String)
+
+    suspend fun issue(userId: String, coupon: Coupon): Coupon
 }

@@ -5,17 +5,18 @@ import com.jvmhater.moduticket.model.query.ConcertSearchQuery
 import com.jvmhater.moduticket.model.query.Page
 import com.jvmhater.moduticket.repository.ConcertRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-// @Transactional
+@Transactional
 class ConcertService(private val concertRepository: ConcertRepository) {
 
-    // @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     suspend fun findConcerts(query: ConcertSearchQuery, page: Page): List<Concert> {
         return concertRepository.findConcerts(query, page)
     }
 
-    // @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     suspend fun find(id: String): Concert {
         return concertRepository.findWithSeats(id)
     }

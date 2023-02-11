@@ -2,29 +2,19 @@ package com.jvmhater.moduticket.repository
 
 import com.jvmhater.moduticket.TestContainerTest
 import com.jvmhater.moduticket.exception.RepositoryException
+import com.jvmhater.moduticket.kotest.CustomDescribeSpec
 import com.jvmhater.moduticket.model.CouponFixture
-import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
-import com.jvmhater.moduticket.util.readResourceFile
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
-import io.kotest.extensions.time.ConstantNowTestListener
 import io.kotest.matchers.shouldBe
-import java.time.LocalDateTime
 
 @TestContainerTest
 class SpringDataCouponRepositoryTest(
     r2dbcCouponRepository: R2dbcCouponRepository,
-) : DescribeSpec() {
-    override fun listeners() =
-        listOf(ConstantNowTestListener(LocalDateTime.of(2023, 1, 24, 10, 15, 30)))
+    r2dbcIssuedCouponRepository: R2dbcIssuedCouponRepository
+) : CustomDescribeSpec() {
 
-    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
-        TestMySQLContainer.sql(readResourceFile("ddl/truncate.sql"))
-    }
-
-    private val couponRepository = SpringDataCouponRepository(r2dbcCouponRepository)
+    private val couponRepository =
+        SpringDataCouponRepository(r2dbcCouponRepository, r2dbcIssuedCouponRepository)
 
     init {
         describe("#findCoupons") {

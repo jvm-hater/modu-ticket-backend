@@ -6,9 +6,9 @@ object UserFixture {
     fun generate(
         id: String = generateId(),
         password: String = "testPassword",
-        coupons: List<Coupon> = emptyList(),
-        rank: Rank = Rank.DIAMOND,
-        point: Int = 1000
+        coupons: MutableList<Coupon> = mutableListOf(),
+        rank: Rank = Rank.BRONZE,
+        point: Int = 0
     ): User {
         return User(id = id, password = password, coupons = coupons, rank = rank, point = point)
     }

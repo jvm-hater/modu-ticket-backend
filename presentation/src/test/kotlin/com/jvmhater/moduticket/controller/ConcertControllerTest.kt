@@ -4,7 +4,7 @@ import com.jvmhater.moduticket.IntegrationTest
 import com.jvmhater.moduticket.doDelete
 import com.jvmhater.moduticket.doGet
 import com.jvmhater.moduticket.doPost
-import com.jvmhater.moduticket.dto.CreateConcertRequestFixture
+import com.jvmhater.moduticket.dto.request.CreateConcertRequestFixture
 import com.jvmhater.moduticket.dto.request.ViewConcertsRequest
 import com.jvmhater.moduticket.dto.response.toResponse
 import com.jvmhater.moduticket.kotest.CustomDescribeSpec

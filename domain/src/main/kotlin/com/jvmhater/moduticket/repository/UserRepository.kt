@@ -9,5 +9,7 @@ interface UserRepository {
 
     suspend fun findAll(): List<User>
 
+    suspend fun findWithIssuedCoupon(id: String): User
+
     suspend fun delete(id: String)
 }

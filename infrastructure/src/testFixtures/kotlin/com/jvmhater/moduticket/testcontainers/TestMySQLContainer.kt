@@ -1,6 +1,6 @@
 package com.jvmhater.moduticket.testcontainers
 
-import dev.miku.r2dbc.mysql.MySqlConnectionFactoryProvider
+import com.github.jasync.r2dbc.mysql.MysqlConnectionFactoryProvider
 import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryOptions
 import java.time.Duration
@@ -51,7 +51,7 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
             }
 
             connectionFactory =
-                MySqlConnectionFactoryProvider().create(getConnectionFactoryOption())
+                MysqlConnectionFactoryProvider().create(getConnectionFactoryOption())
             databaseClient = DatabaseClient.create(connectionFactory)
 
             val port = instance.getMappedPort(MYSQL_PORT)

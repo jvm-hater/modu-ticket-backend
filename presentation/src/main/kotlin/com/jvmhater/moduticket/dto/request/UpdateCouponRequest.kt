@@ -2,9 +2,10 @@ package com.jvmhater.moduticket.dto.request
 
 import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.model.vo.ConcertCategory
+import com.jvmhater.moduticket.model.vo.toQuantity
 import java.time.LocalDateTime
 
-class UpdateCouponRequest(
+data class UpdateCouponRequest(
     val name: String,
     val discountRate: Int,
     val concertCategory: ConcertCategory,
@@ -23,23 +24,7 @@ class UpdateCouponRequest(
             maxDiscountAmount = maxDiscountAmount,
             useStartDate = useStartDate,
             useEndDate = useEndDate,
-            issuableQuantity = issuableQuantity
+            issuableQuantity = issuableQuantity.toQuantity()
         )
-    }
-
-    companion object {
-        fun from(coupon: Coupon): UpdateCouponRequest {
-            return coupon.run {
-                UpdateCouponRequest(
-                    name = name,
-                    discountRate = discountRate,
-                    concertCategory = concertCategory,
-                    maxDiscountAmount = maxDiscountAmount,
-                    useStartDate = useStartDate,
-                    useEndDate = useEndDate,
-                    issuableQuantity = issuableQuantity
-                )
-            }
-        }
     }
 }

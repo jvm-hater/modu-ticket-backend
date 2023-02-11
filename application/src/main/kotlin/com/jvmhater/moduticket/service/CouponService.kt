@@ -2,15 +2,20 @@ package com.jvmhater.moduticket.service
 
 import com.jvmhater.moduticket.model.Coupon
 import com.jvmhater.moduticket.repository.CouponRepository
+import com.jvmhater.moduticket.repository.UserRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class CouponService(val couponRepository: CouponRepository) {
+@Transactional
+class CouponService(val couponRepository: CouponRepository, val userRepository: UserRepository) {
 
+    @Transactional(readOnly = true)
     suspend fun findCoupons(name: String): List<Coupon> {
         return couponRepository.findCoupons(name)
     }
 
+    @Transactional(readOnly = true)
     suspend fun find(id: String): Coupon {
         return couponRepository.find(id)
     }
@@ -25,5 +30,16 @@ class CouponService(val couponRepository: CouponRepository) {
 
     suspend fun delete(id: String) {
         couponRepository.delete(id)
+    }
+
+    // TODO: 추후 동시성 검증을 거쳐야 합니다.
+    suspend fun issueCoupon(userId: String, couponId: String): Coupon {
+        val coupon = couponRepository.find(couponId)
+        coupon.validateCouponUseDate()
+
+        val user = userRepository.findWithIssuedCoupon(userId)
+        user.validateAlreadyIssueCoupon(coupon)
+
+        return couponRepository.issue(userId, coupon)
     }
 }
