@@ -1,10 +1,6 @@
 package com.jvmhater.moduticket.model
 
-<<<<<<< HEAD
-=======
-import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.util.generateId
->>>>>>> 3665b0c (feat: apply auth pr review)
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Transient
@@ -25,11 +21,5 @@ data class UserRow(
         const val ID_PREFIX = "user-id-"
     }
 
-    fun toDomain(): User =
-        User(
-            id = userId,
-            rank = rank,
-            point = point,
-            password = password
-        )
+    fun toDomain(): User = User(id = userId, point = point, password = password)
 }

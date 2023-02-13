@@ -20,18 +20,16 @@ class AuthServiceTest : DescribeSpec() {
         describe("#login") {
             context("올바른 유저 정보가 들어왔을때") {
                 coEvery { userRepository.find("test") } returns
-                        UserFixture.generate(password = "password", id = "test")
-                coEvery { jwtProvider.createJwt("test") } returns
-                        "test-token"
+                    UserFixture.generate(password = "password", id = "test")
+                coEvery { jwtProvider.createJwt("test") } returns "test-token"
                 it("성공한다.") {
                     val result = authService.login("test", "password")
                     result shouldBe "test-token"
-
                 }
             }
             context("해당 유저가 존재하지 않을 때") {
                 coEvery { userRepository.find("test") } throws
-                        RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
+                    RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
                 it("존재하지 않는 유저라는 오류가 발생한다.") {
                     shouldThrow<RepositoryException.RecordNotFound> {
                         authService.login("test", "password")
@@ -40,7 +38,7 @@ class AuthServiceTest : DescribeSpec() {
             }
             context("잘못된 비밀번호를 입력했을 때") {
                 coEvery { userRepository.find("test") } returns
-                        UserFixture.generate(password = "password")
+                    UserFixture.generate(password = "password")
                 it("비밀번호 오류가 발생한다.") {
                     shouldThrow<DomainException.InvalidArgumentException> {
                         authService.login("test", "password2")
@@ -58,7 +56,7 @@ class AuthServiceTest : DescribeSpec() {
             }
             context("When the user already exists") {
                 coEvery { userRepository.create("test", "password") } throws
-                        RepositoryException.RecordAlreadyExisted(message = "이미 존재하는 유저입니다.")
+                    RepositoryException.RecordAlreadyExisted(message = "이미 존재하는 유저입니다.")
                 it("throw RecordAlreadyExisted") {
                     shouldThrow<RepositoryException.RecordAlreadyExisted> {
                         authService.signUp("test", "password")

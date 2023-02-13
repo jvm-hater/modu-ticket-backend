@@ -1,22 +1,25 @@
 package com.jvmhater.moduticket.service
 
-import com.jvmhater.moduticket.JwtProvider
 import com.jvmhater.moduticket.exception.DomainException
+import com.jvmhater.moduticket.repository.TokenProvider
 import com.jvmhater.moduticket.repository.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
-class AuthService(private val userRepository: UserRepository, private val jwtProvider: JwtProvider) {
+class AuthService(
+    private val userRepository: UserRepository,
+    private val tokenProvider: TokenProvider
+) {
 
-    suspend fun login(id: String, password: String) : String {
-        val user = userRepository.find(id)
+    suspend fun login(userId: String, password: String): String {
+        val user = userRepository.find(userId)
         if (user.password != password) {
             throw DomainException.InvalidArgumentException(message = "비밀번호가 일치하지 않습니다.")
         }
-        return jwtProvider.createJwt(user.id)
+        return tokenProvider.createToken(user.id)
     }
 
-    suspend fun signUp(id: String, password: String) {
-        return userRepository.create(id, password)
+    suspend fun signUp(userId: String, password: String) {
+        return userRepository.create(userId, password)
     }
 }

@@ -5,12 +5,10 @@ import com.jvmhater.moduticket.model.User
 import com.jvmhater.moduticket.model.UserRow
 import com.jvmhater.moduticket.model.toDomains
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
-import reactor.core.publisher.Mono
 
 @Repository
 class SpringDataUserRepository(
@@ -21,7 +19,7 @@ class SpringDataUserRepository(
 
     override suspend fun create(id: String, password: String) {
         try {
-            r2dbcUserRepository.save(UserRow(isNewRow = true, rowId = id, password = password))
+            r2dbcUserRepository.save(UserRow(isNewRow = true, userId = id, password = password))
         } catch (e: DataIntegrityViolationException) {
             throw RepositoryException.RecordAlreadyExisted(e, "이미 존재하는 유저입니다.")
         } catch (e: DataAccessException) {
@@ -30,8 +28,11 @@ class SpringDataUserRepository(
     }
 
     override suspend fun find(id: String): User {
-        return r2dbcUserRepository.findByUserId(id).map { it.toDomain() }.awaitSingle()
-            ?: throw RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
+        try {
+            return r2dbcUserRepository.findByUserId(id).toDomain()
+        } catch (e: Exception) {
+            throw RepositoryException.RecordNotFound(message = "존재하지 않는 유저입니다.")
+        }
     }
 
     override suspend fun findAll(): List<User> {
@@ -61,5 +62,5 @@ class SpringDataUserRepository(
 
 @Repository
 interface R2dbcUserRepository : CoroutineCrudRepository<UserRow, String> {
-    fun findByUserId(userId: String): Mono<UserRow>
+    suspend fun findByUserId(userId: String): UserRow
 }

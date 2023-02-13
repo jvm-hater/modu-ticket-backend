@@ -1,6 +1,5 @@
 package com.jvmhater.moduticket.controller
 
-import com.jvmhater.moduticket.dto.request.SignUpRequest
 import com.jvmhater.moduticket.dto.response.UserResponse
 import com.jvmhater.moduticket.service.UserService
 import io.swagger.v3.oas.annotations.Operation

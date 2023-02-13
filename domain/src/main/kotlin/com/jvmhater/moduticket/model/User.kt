@@ -6,7 +6,6 @@ data class User(
     val id: String,
     val password: String,
     val point: Int,
-    val rank: Rank,
     // val reservationList: List<Reservation>?, TODO() 추후 추가 필요
     val coupons: MutableList<Coupon> = mutableListOf()
 ) {
@@ -19,4 +18,25 @@ data class User(
     fun addCoupons(coupons: List<Coupon>) {
         this.coupons.addAll(coupons)
     }
+
+    val rank: Rank by lazy { rateRank() }
+
+    private fun rateRank(): Rank =
+        when {
+            point > 50000 -> {
+                Rank.DIAMOND
+            }
+            point > 10000 -> {
+                Rank.PLATINUM
+            }
+            point > 5000 -> {
+                Rank.GOLD
+            }
+            point > 3000 -> {
+                Rank.SILVER
+            }
+            else -> {
+                Rank.BRONZE
+            }
+        }
 }
