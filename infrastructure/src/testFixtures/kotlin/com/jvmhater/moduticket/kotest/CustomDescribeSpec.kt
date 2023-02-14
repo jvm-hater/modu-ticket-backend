@@ -13,6 +13,6 @@ abstract class CustomDescribeSpec(body: DescribeSpec.() -> Unit = {}) : Describe
         listOf(ConstantNowTestListener(LocalDateTime.of(2023, 1, 24, 10, 15, 30)))
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {
-        TestMySQLContainer.truncateAllTable()
+        TestMySQLContainer.truncateAllTables()
     }
 }

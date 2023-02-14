@@ -81,7 +81,7 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
             instance.stop()
         }
 
-        suspend fun truncateAllTable() {
+        suspend fun truncateAllTables() {
             databaseClient
                 .sql(
                     """
