@@ -1,7 +1,6 @@
 package com.jvmhater.moduticket.kotest
 
 import com.jvmhater.moduticket.testcontainers.TestMySQLContainer
-import com.jvmhater.moduticket.util.readResourceFile
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
@@ -14,6 +13,6 @@ abstract class CustomDescribeSpec(body: DescribeSpec.() -> Unit = {}) : Describe
         listOf(ConstantNowTestListener(LocalDateTime.of(2023, 1, 24, 10, 15, 30)))
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {
-        readResourceFile("ddl/truncate.sql").forEach { TestMySQLContainer.sql(it) }
+        TestMySQLContainer.truncateAllTable()
     }
 }
