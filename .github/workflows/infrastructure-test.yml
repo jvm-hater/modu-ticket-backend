@@ -5,7 +5,7 @@ on:
     branches: 
     - '**'
     paths:
-      - 'infrasturcture/**'
+      - 'infrastructure/**'
       - 'domain/**'
       - 'build.gradle.kts'
 
