@@ -4,7 +4,7 @@ import com.github.jasync.r2dbc.mysql.MysqlConnectionFactoryProvider
 import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryOptions
 import java.time.Duration
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.collect
 import org.flywaydb.core.Flyway
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.r2dbc.core.await
@@ -93,8 +93,7 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
                 )
                 .fetch()
                 .flow()
-                .toList()
-                .forEach {
+                .collect {
                     it.values.forEach { value -> databaseClient.sql(value.toString()).await() }
                 }
         }
