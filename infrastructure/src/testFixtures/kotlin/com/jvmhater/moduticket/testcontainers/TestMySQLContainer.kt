@@ -4,8 +4,11 @@ import com.github.jasync.r2dbc.mysql.MysqlConnectionFactoryProvider
 import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryOptions
 import java.time.Duration
+import kotlinx.coroutines.flow.collect
 import org.flywaydb.core.Flyway
 import org.springframework.r2dbc.core.DatabaseClient
+import org.springframework.r2dbc.core.await
+import org.springframework.r2dbc.core.flow
 import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.containers.MySQLR2DBCDatabaseContainer
 import org.testcontainers.containers.output.Slf4jLogConsumer
@@ -22,7 +25,6 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
         private lateinit var instance: TestMySQLContainer
         private lateinit var databaseClient: DatabaseClient
         private lateinit var connectionFactory: ConnectionFactory
-        private lateinit var flyway: Flyway
 
         private fun getConnectionFactoryOption(): ConnectionFactoryOptions {
             return MySQLR2DBCDatabaseContainer.getOptions(instance)
@@ -55,17 +57,16 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
             databaseClient = DatabaseClient.create(connectionFactory)
 
             val port = instance.getMappedPort(MYSQL_PORT)
-            flyway =
-                Flyway.configure()
-                    .baselineOnMigrate(true)
-                    .baselineVersion("1")
-                    .dataSource(
-                        "jdbc:mysql://${instance.host}:$port/$DATABASE_NAME",
-                        instance.username,
-                        instance.password
-                    )
-                    .load()
-            flyway.migrate()
+            Flyway.configure()
+                .baselineOnMigrate(true)
+                .baselineVersion("1")
+                .dataSource(
+                    "jdbc:mysql://${instance.host}:$port/$DATABASE_NAME",
+                    instance.username,
+                    instance.password
+                )
+                .load()
+                .migrate()
 
             return DatabaseProperty(
                 host = instance.host,
@@ -79,6 +80,23 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
         fun stop() {
             instance.stop()
         }
+
+        suspend fun truncateAllTables() {
+            databaseClient
+                .sql(
+                    """
+                SELECT CONCAT('TRUNCATE TABLE ', table_name, ';')
+                FROM information_schema.tables
+                WHERE table_schema = '${instance.databaseName}';
+                """
+                        .trimIndent()
+                )
+                .fetch()
+                .flow()
+                .collect {
+                    it.values.forEach { value -> databaseClient.sql(value.toString()).await() }
+                }
+        }
     }
 
     data class DatabaseProperty(
@@ -86,6 +104,6 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
         val port: Int,
         val databaseName: String,
         val username: String,
-        val password: String
+        val password: String,
     )
 }
