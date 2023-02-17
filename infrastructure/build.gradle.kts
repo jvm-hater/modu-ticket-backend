@@ -19,5 +19,6 @@ dependencies {
     testFixturesImplementation("org.testcontainers:mysql:1.17.6")
     testFixturesImplementation("org.testcontainers:r2dbc:1.17.6")
     testFixturesImplementation("org.testcontainers:junit-jupiter:1.17.6")
+    testFixturesImplementation("org.testcontainers:elasticsearch:1.17.6")
     testFixturesImplementation(project(":domain"))
 }

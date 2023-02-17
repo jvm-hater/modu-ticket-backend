@@ -40,7 +40,7 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
             databaseClient.sql(sql).then().block()
         }
 
-        fun start(): DatabaseProperty {
+        fun start(): MySQLProperty {
             if (!Companion::instance.isInitialized) {
                 instance =
                     TestMySQLContainer()
@@ -68,7 +68,7 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
                 .load()
                 .migrate()
 
-            return DatabaseProperty(
+            return MySQLProperty(
                 host = instance.host,
                 port = instance.getMappedPort(MYSQL_PORT),
                 databaseName = instance.databaseName,
@@ -99,7 +99,7 @@ class TestMySQLContainer : MySQLContainer<TestMySQLContainer>("mysql:latest") {
         }
     }
 
-    data class DatabaseProperty(
+    data class MySQLProperty(
         val host: String,
         val port: Int,
         val databaseName: String,
