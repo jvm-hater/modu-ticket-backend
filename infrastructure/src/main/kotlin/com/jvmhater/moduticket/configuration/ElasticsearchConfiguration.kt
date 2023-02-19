@@ -1,6 +1,6 @@
 package com.jvmhater.moduticket.configuration
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient
+import co.elastic.clients.elasticsearch.ElasticsearchAsyncClient
 import co.elastic.clients.json.jackson.JacksonJsonpMapper
 import co.elastic.clients.transport.rest_client.RestClientTransport
 import org.apache.http.HttpHost
@@ -10,13 +10,10 @@ import org.apache.http.impl.client.BasicCredentialsProvider
 import org.elasticsearch.client.RestClient
 import org.elasticsearch.client.RestClientBuilder.HttpClientConfigCallback
 import org.elasticsearch.client.RestClientBuilder.RequestConfigCallback
-import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-@EnableConfigurationProperties(ElasticsearchProperty::class)
 class ElasticsearchConfiguration(private val elasticsearchProperty: ElasticsearchProperty) {
 
     @Bean
@@ -51,10 +48,10 @@ class ElasticsearchConfiguration(private val elasticsearchProperty: Elasticsearc
     }
 
     @Bean
-    fun elasticsearchClient(
+    fun elasticsearchAsyncClient(
         httpClientConfigCallback: HttpClientConfigCallback,
         requestConfigCallback: RequestConfigCallback
-    ): ElasticsearchClient {
+    ): ElasticsearchAsyncClient {
         val httpHost = HttpHost(elasticsearchProperty.host, elasticsearchProperty.port, "http")
         val restClient =
             RestClient.builder(httpHost)
@@ -63,17 +60,6 @@ class ElasticsearchConfiguration(private val elasticsearchProperty: Elasticsearc
                 .build()
         val transport = RestClientTransport(restClient, JacksonJsonpMapper())
 
-        return ElasticsearchClient(transport)
+        return ElasticsearchAsyncClient(transport)
     }
-}
-
-@ConfigurationProperties(prefix = "elasticsearch")
-data class ElasticsearchProperty(
-    val host: String,
-    val port: Int,
-    val username: String,
-    val password: String,
-    val index: Index
-) {
-    data class Index(val concert: String)
 }

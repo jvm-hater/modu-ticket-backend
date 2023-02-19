@@ -1,6 +1,6 @@
 package com.jvmhater.moduticket.repository
 
-import com.jvmhater.moduticket.TestContainerTest
+import com.jvmhater.moduticket.TestMySQLContainerTest
 import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.kotest.CustomDescribeSpec
 import com.jvmhater.moduticket.model.CouponFixture
@@ -9,7 +9,7 @@ import com.jvmhater.moduticket.model.UserFixture
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 
-@TestContainerTest
+@TestMySQLContainerTest
 class SpringDataUserRepositoryTest(
     r2dbcUserRepository: R2dbcUserRepository,
     r2dbcCouponRepository: R2dbcCouponRepository,

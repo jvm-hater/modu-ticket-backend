@@ -1,6 +1,6 @@
 package com.jvmhater.moduticket.repository
 
-import com.jvmhater.moduticket.TestContainerTest
+import com.jvmhater.moduticket.TestMySQLContainerTest
 import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.kotest.CustomDescribeSpec
 import com.jvmhater.moduticket.model.ConcertFixture
@@ -12,7 +12,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 
-@TestContainerTest
+@TestMySQLContainerTest
 class SpringDataConcertRepositoryTest(
     r2dbcConcertRepository: R2dbcConcertRepository,
     r2dbcSeatRepository: R2dbcSeatRepository,

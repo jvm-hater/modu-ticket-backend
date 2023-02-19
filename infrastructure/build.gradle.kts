@@ -9,7 +9,7 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql:9.11.0")
     implementation("co.elastic.clients:elasticsearch-java:8.6.2")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.3")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
 
     /* test fixtures */
     testFixturesImplementation("mysql:mysql-connector-java")

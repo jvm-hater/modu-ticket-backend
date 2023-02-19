@@ -15,16 +15,16 @@ class TestR2dbcConfiguration : AbstractR2dbcConfiguration() {
 
     @Bean
     override fun connectionFactory(): ConnectionFactory {
-        val databaseProperty = TestMySQLContainer.start()
+        val property = TestMySQLContainer.start()
 
         return ConnectionFactories.get(
             ConnectionFactoryOptions.builder()
                 .option(ConnectionFactoryOptions.DRIVER, "mysql")
-                .option(ConnectionFactoryOptions.HOST, databaseProperty.host)
-                .option(ConnectionFactoryOptions.PORT, databaseProperty.port)
-                .option(ConnectionFactoryOptions.DATABASE, databaseProperty.databaseName)
-                .option(ConnectionFactoryOptions.USER, databaseProperty.username)
-                .option(ConnectionFactoryOptions.PASSWORD, databaseProperty.password)
+                .option(ConnectionFactoryOptions.HOST, property.host)
+                .option(ConnectionFactoryOptions.PORT, property.port)
+                .option(ConnectionFactoryOptions.DATABASE, property.databaseName)
+                .option(ConnectionFactoryOptions.USER, property.username)
+                .option(ConnectionFactoryOptions.PASSWORD, property.password)
                 .build()
         )
     }
