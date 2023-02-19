@@ -8,6 +8,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql:9.11.0")
+    implementation("co.elastic.clients:elasticsearch-java:8.6.2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.3")
 
     /* test fixtures */
     testFixturesImplementation("mysql:mysql-connector-java")

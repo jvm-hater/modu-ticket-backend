@@ -15,7 +15,16 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
   paths-to-match: /api/**
+
 jwt:
   header: Authorization
   secret: bW9kdS10aWNrZXQ=
   token-validity-in-seconds: 60
+
+elasticsearch:
+  host: ${CONF_MODU_TICKET_ELASTICSEARCH_HOST:localhost}
+  port: ${CONF_MODU_TICKET_ELASTICSEARCH_PORT:9300}
+  username: ${CONF_MODU_TICKET_ELASTICSEARCH_USERNAME:admin}
+  password: ${CONF_MODU_TICKET_ELASTICSEARCH_PASSWORD:admin}
+  index:
+    concert: ${CONF_MODU_TICKET_ELASTICSEARCH_INDEX_CONCERT:concerts-v1}
