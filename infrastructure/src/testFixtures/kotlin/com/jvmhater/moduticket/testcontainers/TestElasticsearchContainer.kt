@@ -14,9 +14,14 @@ class TestElasticsearchContainer {
         fun start(): ElasticsearchProperty {
             if (!Companion::instance.isInitialized) {
                 instance =
-                    ElasticsearchContainer(DOCKER_IMAGE_NAME).withPassword(PASSWORD).apply {
-                        start()
-                    }
+                    ElasticsearchContainer(DOCKER_IMAGE_NAME)
+                        .withPassword(PASSWORD)
+                        // disabled TLS and use plain text HTTP
+                        .withEnv(
+                            "xpack.security.enabled",
+                            "false"
+                        )
+                        .apply { start() }
             }
 
             return ElasticsearchProperty(
