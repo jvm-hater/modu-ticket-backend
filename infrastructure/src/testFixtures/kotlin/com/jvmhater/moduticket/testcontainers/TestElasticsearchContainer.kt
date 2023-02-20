@@ -16,11 +16,11 @@ class TestElasticsearchContainer {
                 instance =
                     ElasticsearchContainer(DOCKER_IMAGE_NAME)
                         .withPassword(PASSWORD)
-                        // disabled TLS and use plain text HTTP
-                        .withEnv(
-                            "xpack.security.enabled",
-                            "false"
-                        )
+                        /*
+                        disabled TLS and use plain text HTTP
+                        https://spinscale.de/posts/2022-02-17-running-elasticsearch-8-with-testcontainers.html
+                        */
+                        .withEnv("xpack.security.enabled", "false")
                         .apply { start() }
             }
 
