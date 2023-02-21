@@ -10,12 +10,11 @@ import com.jvmhater.moduticket.kotest.CustomDescribeSpec
 import com.jvmhater.moduticket.model.Rank
 import com.jvmhater.moduticket.model.User
 import com.jvmhater.moduticket.model.UserFixture
-import com.jvmhater.moduticket.repository.UserRepository
 import com.jvmhater.moduticket.util.toJson
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @IntegrationTest
-class UserControllerTest(client: WebTestClient, val userRepository: UserRepository) :
+class UserControllerTest(client: WebTestClient) :
     CustomDescribeSpec() {
 
     private val baseUrl = "/api/users"
@@ -34,7 +33,7 @@ class UserControllerTest(client: WebTestClient, val userRepository: UserReposito
                 }
             }
             context("이미 존재하는 유저라면") {
-                userRepository.create("test", "password")
+                requestSignup(client, User(id = "test", password = "password", point = 0, coupons = mutableListOf()))
                 it("유저 생성을 실패한다.") {
                     client
                         .doPost(
@@ -48,7 +47,7 @@ class UserControllerTest(client: WebTestClient, val userRepository: UserReposito
         }
         describe("#find") {
             context("존재하는 유저의 정보가 들어오면") {
-                userRepository.create("testId", "password")
+                requestSignup(client, User(id = "testId", password = "password", point = 0, coupons = mutableListOf()))
                 it("해당 유저를 리턴한다") {
                     client
                         .doGet("$baseUrl/testId")
@@ -57,11 +56,11 @@ class UserControllerTest(client: WebTestClient, val userRepository: UserReposito
                         .expectBody()
                         .json(
                             UserResponse(
-                                    id = "testId",
-                                    point = 0,
-                                    rank = Rank.BRONZE,
-                                    coupons = emptyList()
-                                )
+                                id = "testId",
+                                point = 0,
+                                rank = Rank.BRONZE,
+                                coupons = emptyList()
+                            )
                                 .toJson()
                         )
                 }
@@ -73,7 +72,8 @@ class UserControllerTest(client: WebTestClient, val userRepository: UserReposito
 
         describe("#delete") {
             context("존재하는 유저의 정보가 들어오면") {
-                userRepository.create("testId", "password")
+                requestSignup(client, User(id = "testId", password = "password", point = 0, coupons = mutableListOf()))
+
                 it("해당 유저를 삭제한다") {
                     client
                         .doDelete("$baseUrl/testId", mapOf("id" to "testId"))
