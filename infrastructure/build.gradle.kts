@@ -8,6 +8,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql:9.11.0")
+    implementation("co.elastic.clients:elasticsearch-java:8.6.2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.7.1")
 
     /* test fixtures */
     testFixturesImplementation("mysql:mysql-connector-java")
@@ -19,5 +21,6 @@ dependencies {
     testFixturesImplementation("org.testcontainers:mysql:1.17.6")
     testFixturesImplementation("org.testcontainers:r2dbc:1.17.6")
     testFixturesImplementation("org.testcontainers:junit-jupiter:1.17.6")
+    testFixturesImplementation("org.testcontainers:elasticsearch:1.17.6")
     testFixturesImplementation(project(":domain"))
 }

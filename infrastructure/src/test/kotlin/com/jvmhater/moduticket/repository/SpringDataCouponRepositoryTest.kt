@@ -1,13 +1,13 @@
 package com.jvmhater.moduticket.repository
 
-import com.jvmhater.moduticket.TestContainerTest
+import com.jvmhater.moduticket.TestMySQLContainerTest
 import com.jvmhater.moduticket.exception.RepositoryException
 import com.jvmhater.moduticket.kotest.CustomDescribeSpec
 import com.jvmhater.moduticket.model.CouponFixture
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 
-@TestContainerTest
+@TestMySQLContainerTest
 class SpringDataCouponRepositoryTest(
     r2dbcCouponRepository: R2dbcCouponRepository,
     r2dbcIssuedCouponRepository: R2dbcIssuedCouponRepository
