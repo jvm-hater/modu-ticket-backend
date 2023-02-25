@@ -7,4 +7,9 @@ sealed class DomainException(override val message: String?, override val cause: 
         override val message: String,
         override val cause: Throwable? = null
     ) : DomainException(message, cause)
+
+    data class UnauthorizedRequestException(
+        override val message: String,
+        override val cause: Throwable? = null
+    ) : DomainException(message, cause)
 }

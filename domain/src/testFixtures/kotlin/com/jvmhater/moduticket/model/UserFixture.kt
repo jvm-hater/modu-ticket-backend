@@ -7,9 +7,8 @@ object UserFixture {
         id: String = generateId(),
         password: String = "testPassword",
         coupons: MutableList<Coupon> = mutableListOf(),
-        rank: Rank = Rank.BRONZE,
         point: Int = 0
     ): User {
-        return User(id = id, password = password, coupons = coupons, rank = rank, point = point)
+        return User(id = id, password = password, coupons = coupons, point = point)
     }
 }

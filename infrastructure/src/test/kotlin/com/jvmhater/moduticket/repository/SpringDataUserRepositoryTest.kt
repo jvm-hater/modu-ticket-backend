@@ -29,15 +29,15 @@ class SpringDataUserRepositoryTest(
         describe("#create") {
             val user = UserFixture.generate()
             context("새로운 id의 유저라면") {
-                userRepository.create(id = user.id, password = user.password)
+                userRepository.create(userId = user.id, password = user.password)
                 it("테이블에 값을 저장한다") { userRepository.find(user.id).id shouldBe user.id }
             }
 
             context("이미 있는 id의 유저라면") {
-                userRepository.create(id = user.id, password = user.password)
+                userRepository.create(userId = user.id, password = user.password)
                 it("값 저장을 실패한다.") {
                     shouldThrow<RepositoryException.RecordAlreadyExisted> {
-                        userRepository.create(id = user.id, password = user.password)
+                        userRepository.create(userId = user.id, password = user.password)
                     }
                 }
             }
@@ -46,14 +46,14 @@ class SpringDataUserRepositoryTest(
         describe("#find") {
             context("테이블에 있는 유저라면") {
                 val user = UserFixture.generate()
-                userRepository.create(id = user.id, password = user.password)
+                userRepository.create(userId = user.id, password = user.password)
                 it("해당 유저를 리턴한다.") { userRepository.find(user.id) shouldBe user }
             }
 
             context("해당 유저가 존재하지 않는다면") {
                 it("조회를 실패한다.") {
                     shouldThrow<RepositoryException.RecordNotFound> {
-                        userRepository.find(id = "not-found-id")
+                        userRepository.find(userId = "not-found-id")
                     }
                 }
             }
@@ -62,8 +62,10 @@ class SpringDataUserRepositoryTest(
         describe("#findAll") {
             context("테이블에 있는 유저라면") {
                 val user = UserFixture.generate()
-                userRepository.create(id = user.id, password = user.password)
-                it("해당 유저를 삭제한다.") { userRepository.delete(user.id) shouldBe Unit }
+                userRepository.create(userId = user.id, password = user.password)
+                it("해당 유저를 삭제한다.") {
+                    userRepository.delete(user.id) shouldBe Unit
+                }
             }
             context("해당 유저가 존재하지 않는다면") {
                 it("삭제를 실패한다.") {
@@ -77,7 +79,7 @@ class SpringDataUserRepositoryTest(
         describe("#findWithIssuedCoupon") {
             context("테이블에 있는 유저라면") {
                 val user = UserFixture.generate()
-                userRepository.create(id = user.id, password = user.password)
+                userRepository.create(userId = user.id, password = user.password)
 
                 val coupon = CouponFixture.generate()
                 couponRepository.create(coupon)
