@@ -34,6 +34,8 @@ allprojects {
         implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
         implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+        implementation("org.springframework.boot:spring-boot-starter-webflux")
+
         //        implementation("org.springframework.boot:spring-boot-starter-security")
         //        implementation("io.jsonwebtoken:jjwt:0.9.1")
 
@@ -77,7 +79,7 @@ tasks {
     compileKotlin {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "17"
+            jvmTarget = "1.8"
         }
     }
 

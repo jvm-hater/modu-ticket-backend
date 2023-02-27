@@ -1,14 +1,14 @@
 spring:
   r2dbc:
     url: r2dbc:mysql://${CONF_MODU_TICKET_DB_HOST:localhost}:${CONF_MODU_TICKET_DB_PORT:3306}/${CONF_MODU_TICKET_DB_DATABASE:modu_ticket}
-    username: ${CONF_MODU_TICKET_DB_USERNAME:local}
+    username: ${CONF_MODU_TICKET_DB_USERNAME:root}
     password: ${CONF_MODU_TICKET_DB_PASSWORD:local}
   flyway:
     enabled: true
     baseline-on-migrate: true
     baseline-version: 1
     url: jdbc:mysql://${CONF_MODU_TICKET_DB_HOST:localhost}:${CONF_MODU_TICKET_DB_PORT:3306}/${CONF_MODU_TICKET_DB_DATABASE:modu_ticket}
-    user: ${CONF_MODU_TICKET_DB_USERNAME:local}
+    user: ${CONF_MODU_TICKET_DB_USERNAME:root}
     password: ${CONF_MODU_TICKET_DB_PASSWORD:local}
 
 springdoc:
@@ -19,3 +19,5 @@ jwt:
   header: Authorization
   secret: bW9kdS10aWNrZXQ=
   token-validity-in-seconds: 60
+portone:
+  baseurl: https://api.iamport.kr/

@@ -9,6 +9,8 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql:9.11.0")
 
+    /* webclient */
+
     /* test fixtures */
     testFixturesImplementation("mysql:mysql-connector-java")
     testFixturesImplementation("com.github.jasync-sql:jasync-r2dbc-mysql:2.1.16")
