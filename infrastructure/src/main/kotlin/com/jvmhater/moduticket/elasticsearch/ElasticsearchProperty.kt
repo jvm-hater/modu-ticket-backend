@@ -1,4 +1,4 @@
-package com.jvmhater.moduticket.configuration
+package com.jvmhater.moduticket.elasticsearch
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

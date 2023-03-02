@@ -34,7 +34,7 @@ class SpringDataConcertRepository(
                                 .like("%${query.searchText}%")
                         )
                         .limit(page.size)
-                        .offset(page.page)
+                        .offset(page.page.toLong())
                 )
                 .flow()
                 .toList()
