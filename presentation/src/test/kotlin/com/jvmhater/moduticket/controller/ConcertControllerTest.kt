@@ -5,7 +5,7 @@ import com.jvmhater.moduticket.doDelete
 import com.jvmhater.moduticket.doGet
 import com.jvmhater.moduticket.doPost
 import com.jvmhater.moduticket.dto.request.CreateConcertRequestFixture
-import com.jvmhater.moduticket.dto.request.ViewConcertsRequest
+import com.jvmhater.moduticket.dto.request.SearchConcertsRequest
 import com.jvmhater.moduticket.dto.response.toResponse
 import com.jvmhater.moduticket.kotest.CustomDescribeSpec
 import com.jvmhater.moduticket.model.ConcertFixture
@@ -31,7 +31,7 @@ class ConcertControllerTest(client: WebTestClient, concertRepository: ConcertRep
             concerts.map { concertRepository.create(it) }
 
             context("검색 조건에 맞는 콘서트가 있다면") {
-                val queryParams = ViewConcertsRequest(ConcertCategory.BALLAD, "윤하", 0, 10)
+                val queryParams = SearchConcertsRequest(ConcertCategory.BALLAD, "윤하", 0, 10)
                 val expectedResponse = concerts[0].toResponse()
 
                 it("해당 조건에 맞는 콘서트 리스트가 조회된다.") {

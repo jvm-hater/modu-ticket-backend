@@ -1,7 +1,7 @@
 package com.jvmhater.moduticket.controller
 
 import com.jvmhater.moduticket.dto.request.CreateConcertRequest
-import com.jvmhater.moduticket.dto.request.ViewConcertsRequest
+import com.jvmhater.moduticket.dto.request.SearchConcertsRequest
 import com.jvmhater.moduticket.dto.response.ConcertResponse
 import com.jvmhater.moduticket.dto.response.ConcertsResponse
 import com.jvmhater.moduticket.dto.response.toResponse
@@ -22,9 +22,9 @@ class ConcertController(private val concertService: ConcertService) {
     @Operation(description = "콘서트 목록을 조회한다.")
     @GetMapping
     suspend fun viewConcerts(
-        @ModelAttribute request: ViewConcertsRequest
+        @ModelAttribute request: SearchConcertsRequest
     ): ResponseEntity<ConcertsResponse> = handle {
-        val query = ConcertSearchQuery(request.category, request.searchText).apply {}
+        val query = ConcertSearchQuery(request.category, request.searchText)
         val page = Page(request.page, request.size)
 
         concertService.findConcerts(query, page).toResponse()

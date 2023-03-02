@@ -3,6 +3,7 @@ package com.jvmhater.moduticket.configuration
 import co.elastic.clients.elasticsearch.ElasticsearchAsyncClient
 import co.elastic.clients.json.jackson.JacksonJsonpMapper
 import co.elastic.clients.transport.rest_client.RestClientTransport
+import com.jvmhater.moduticket.elasticsearch.ElasticsearchProperty
 import org.apache.http.HttpHost
 import org.apache.http.auth.AuthScope
 import org.apache.http.auth.UsernamePasswordCredentials

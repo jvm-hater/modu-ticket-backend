@@ -1,0 +1,53 @@
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "edge_ngram_analyzer": {
+          "type": "custom",
+          "tokenizer": "my_edge_ngram"
+        }
+      },
+      "tokenizer": {
+        "my_edge_ngram": {
+          "type": "edge_ngram",
+          "min_gram": 1,
+          "max_gram": 50,
+          "token_chars": []
+        }
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "name": {
+        "type": "text",
+        "analyzer": "edge_ngram_analyzer"
+      },
+      "place": {
+        "type": "keyword"
+      },
+      "start_date": {
+        "type": "date",
+        "format": "epoch_millis"
+      },
+      "time": {
+        "type": "integer"
+      },
+      "category": {
+        "type": "keyword"
+      },
+      "created_at": {
+        "type": "date",
+        "format": "epoch_millis"
+      },
+      "modified_at": {
+        "type": "date",
+        "format": "epoch_millis"
+      }
+    }
+  }
+}
