@@ -21,3 +21,5 @@ jwt:
   token-validity-in-seconds: 60
 portone:
   baseurl: https://api.iamport.kr/
+  api-key: 9502472691574730
+  api-secret: f9f95d77d9a67a903a9103f7be727a23394a4bab6612efbb2ad7de08162d1fb3879ac6f84acca91f

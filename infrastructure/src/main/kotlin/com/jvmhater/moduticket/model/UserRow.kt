@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
 // clustering index 성능 개선 필요
-@Table("users")
+@Table("user")
 data class UserRow(
     @Id @Column("id") override val rowId: String,
     @Transient @Value("null") override val isNewRow: Boolean = false,

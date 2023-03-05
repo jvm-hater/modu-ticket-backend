@@ -10,8 +10,14 @@ import org.springframework.data.relational.core.mapping.Table
 data class PaymentRow(
     @Id @Column("id") override val rowId: String,
     @Transient @Value("null") override val isNewRow: Boolean = false,
-    val paymentId: String, // PG사에서 결제건에 부여한 ID (취소 시 사용됨)
-    val userId: String,
-    val concertId: String,
-    val approvedAmount: UInt,
+    val pgTransactionId: String, // PG사에서 결제건에 부여한 ID (취소 시 사용됨)
+    val approvedAmount: Long,
+    val reservationId: String?
 ) : Row<String>
+
+
+fun PaymentRow.toDomain() = Payment(
+    paymentId = rowId,
+    pgTransactionId = pgTransactionId,
+    amount = approvedAmount.toLong()
+)
